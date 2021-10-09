@@ -12,22 +12,22 @@ import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 import org.zkoss.zul.ListModel;
 import org.zkoss.zul.ListModelList;
+
 import java.util.List;
 import java.util.stream.Collectors;
+
 @VariableResolver(DelegatingVariableResolver.class)
 public class BookAppointmentViewModel extends DoctorViewModel {
     List<AppointmentView> allAppointments;
     List<DoctorView> allDoctors;
-
-
     List<Patient> allPatients;
-
+   private  DoctorView doctorPersistence = new DoctorView();
     @WireVariable
     PatientService patientService;
+
     public PatientService getPatientService() {
         return patientService;
     }
-
 
     private String reasonOfVisit;
 
@@ -51,29 +51,48 @@ public class BookAppointmentViewModel extends DoctorViewModel {
         this.allPatients = allPatients;
     }
 
-
-
     public BookAppointmentViewModel() {
     }
 
-    @Init(superclass=true)
+
+    DoctorView selectedDoctor = new DoctorView();
+    public DoctorView getSelectedDoctor() {
+        return selectedDoctor;
+    }
+
+    public void setSelectedDoctor(DoctorView selectedDoctor) {
+        this.selectedDoctor = selectedDoctor;
+    }
+
+
+    public DoctorView getDoctorPersistence() {
+        return doctorPersistence;
+    }
+
+    public void setDoctorPersistence(DoctorView doctorPersistence) {
+        this.doctorPersistence = doctorPersistence;
+    }
+
+
+    @Init(superclass = true)
     public void BookAppointmentInitSetup() {
 
         this.allDoctors = super.doctorService.getAllDoctors().stream().map(this::convertDoctorToView).collect(Collectors.toList());
-    this.allPatients=patientService.getAllPatients();
+        this.allPatients = patientService.getAllPatients();
     }
-
-
-
-
-    public ListModel<DoctorView> getFilteredDoctors() {
-        return new ListModelList<DoctorView>(this.allDoctors);
-    }
-
 
     @Command
     @NotifyChange({"allDoctors"})
     public void changeFilter() {
         this.allDoctors = super.doctorService.getDoctorsByVisitReason(reasonOfVisit).stream().map(this::convertDoctorToView).collect(Collectors.toList());
+    }
+
+
+    @Command //@Command declares a command method
+    @NotifyChange({"doctorPersistence"})
+    public void selected() {
+
+    this.doctorPersistence.name=this.selectedDoctor.name;
+
     }
 }
