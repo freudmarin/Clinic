@@ -1,0 +1,37 @@
+<zk>
+    <include src="~./zul/template.zul"/>
+
+    <include templateURI="~./zul/template.zul"/>
+    <window apply="org.zkoss.bind.BindComposer"
+            border="normal" hflex="1" vflex="1" contentStyle="overflow:auto"
+            viewModel="@id('vm') @init('com.example.Clinic.spring.controllers.PatientViewModel')">
+<grid width="70%">
+      <columns>
+          <column label=""/>
+          <column label=""/>
+      </columns>
+      <rows>
+          <row>
+              <hbox>
+                  <label value="Patient's ID"/>
+              </hbox>
+              <textbox  value="@bind(vm.patientID)" name="patientID" width="200px"/>
+          </row>
+          <row>
+              <hbox>
+                  <label value="Patient's name "/>
+              </hbox>
+              <textbox value="@bind(vm.name)" name="name"/>
+          </row>
+
+          <row>
+              <hbox>
+                  <label value="Patient's Date of Birth  "/>
+              </hbox>
+              <datebox format="MM/dd/yyyy" value="@bind(vm.dateOfBirth)" name="dateOfBirth"/>
+          </row>
+      </rows>
+  </grid>
+        <button onClick="@command('add')" label="Register"/>
+    </window>
+</zk>

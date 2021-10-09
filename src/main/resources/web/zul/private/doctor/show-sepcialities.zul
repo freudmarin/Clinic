@@ -1,0 +1,49 @@
+<!--
+<zk>
+<window  id="popUp" apply="org.zkoss.bind.BindComposer"
+         border="normal" hflex="1" vflex="1" contentStyle="overflow:auto" viewModel="@id('vm') @init('com.example.Clinic.spring.controllers.DoctorViewModel')"
+    visible="@load(vm.showSpecializationsWindow)">
+    <button label="close" onClick="@command('closed')"/>
+    <listbox id="specializationsListBox" model="@load(vm.specializationsOfADoctor)" >
+        <listhead sizable="true">
+            <listheader label="Specialization Type" width="400px"/>
+        </listhead>
+        <template name="model" >
+            <listitem>
+                <listcell label="@load(each.type)" />
+            </listitem>
+        </template>
+    </listbox>
+
+</window>
+
+<window  id="popUp"
+         border="normal" hflex="1" vflex="1" contentStyle="overflow:auto"
+         visible="@load(vm.showSpecializationsWindow)">
+    <button label="close" onClick="@command('closed')"/>
+
+    <listbox id="specializationsListBox" model="@load(vm.specializationsOfADoctor)" >
+
+
+        <listhead sizable="true">
+            <listheader label="Specialization Type" width="400px"/>
+
+
+
+        </listhead>
+           <zk forEach="${map}">
+               <label value="${each.value}"/>      <label value="${each.key}"/>
+           </zk>
+
+
+
+
+        <template name="model" >
+                <listcell label="@load(each.type)" />
+
+
+            </listitem>
+        </template>
+    </listbox>
+
+</window>

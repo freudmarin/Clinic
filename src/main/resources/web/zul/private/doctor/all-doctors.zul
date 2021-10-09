@@ -1,0 +1,168 @@
+<zk>
+    <include src="~./zul/template.zul"/>
+
+    <include templateURI="~./zul/template.zul"/>
+    <window apply="org.zkoss.bind.BindComposer"
+            border="normal" hflex="1" vflex="1" contentStyle="overflow:auto"
+            viewModel="@id('vm') @init('com.example.Clinic.spring.controllers.DoctorViewModel')">
+
+        <listbox id="doctorListBox" model="@load(vm.allDoctors)" vflex="1">
+
+            <listhead sizable="true">
+                <listheader label="Doctor's ID " width="300px"/>
+                <listheader label="Name" width="300px"/>
+
+                <listheader label="Username" width="300px"/>
+                <listheader label="Specializations" width="300px"/>
+
+            </listhead>
+            <template name="model" var="doctor">
+                <listitem>
+
+                    <listcell label="@load(doctor.id)"/>
+                    <listcell label="@load(doctor.name)"/>
+                    <listcell label="@load(doctor.userName)"/>
+                    <listcell label="@load(doctor.specializationToString())"/>
+                    <!--
+                                        <listcell model="@load(doctorEntity.specializationList)">
+                    <template name="model">
+                        <listitem>
+
+                            <listcell label="@load(each.type)"/>
+                        </listitem>
+                    </template>-->
+
+                </listitem>
+            </template>
+        </listbox>
+        <!--<listbox  model="@load(vm.allDoctors)" vflex="1">
+                           &lt;!&ndash; <template  name="model" var ="test">
+                                <listitem>
+                                <listcell label="@load(test.name)"/>
+                                </listitem>
+                            </template>&ndash;&gt;
+            <template name="model" var="test">
+            <listitem>
+        <listcell label="@load(test.name)"/>-->
+
+        <!--                   &lt;!&ndash;&lt;!&ndash; <listbox  model="@load(vm.allSpecializations)">
+                                <listhead sizable="true">
+                                        <listheader label="Type"/>
+
+                                </listhead>&ndash;&gt;
+        &lt;!&ndash;                        <template name="model" var="doctor.specializationList">
+
+        <listitem>
+                                        <listcell  label="@load(each.type)"/>
+        </listitem>
+                      <!-          </template>&ndash;&gt;
+                        </listitem>
+                    </template>
+                </listbox>-->
+
+
+        <!--   <window id="popUp"
+                    border="normal" hflex="1" vflex="1" mode="highlighted" contentStyle="overflow:auto"
+                    visible="@load(vm.showSpecializationsWindow)">
+                <button  label="x" onClick="@command('closed')"/>
+                <listbox id="specializationsListBox" model="@load(vm.specializationsOfADoctor)" >
+                    <listhead sizable="true">
+                        <listheader label="Specializations of these doctor " width="300px"/>
+
+
+                    </listhead>
+
+                    <template name="model">
+                        <listitem>
+                            <listcell label="@load(each.type)"/>
+
+
+                        </listitem>
+                    </template>
+                </listbox>
+            </window>-->
+
+
+    </window>
+
+</zk>
+        <!--
+The clinic is open from 9:00 to 18:00
+
+[x] Monday from [15:00] to [17:00]
+[ ] Tuesday
+[x] Wednesday
+[ ] Thursday
+[x] Friday
+[ ] Saturday
+
+[ ] spec 1
+[x] spec 2
+
+-->
+
+
+        <!--
+        <zk>
+            <include src="~./zul/template.zul"/>
+
+            <include templateURI="~./zul/template.zul"/>
+            <window apply="org.zkoss.bind.BindComposer"
+                    border="normal" hflex="1" vflex="1" contentStyle="overflow:auto"
+                    viewModel="@id('vm') @init('com.example.Clinic.spring.controllers.DoctorViewModel')"/>
+
+            <listbox id="doctorListBox" model="@load(vm.doctorList)" vflex="1">
+
+                <listhead sizable="true">
+
+                    <listheader label="Doctor's ID  " width="130px"/>
+                    <listheader label="Name" width="130px"/>
+
+
+
+                    <listheader label="Username" width="130px"/>
+
+
+                  &lt;!&ndash;  <listheader label="Specializations" width="130px"/>&ndash;&gt;
+
+
+                </listhead>
+                <template name="model">
+                    <listitem>
+                        <listcell label="@load(each.id)"/>
+                        <listcell label="@load(each.name)"/>
+                        <listcell label="@load(each.username)"/>
+                       &lt;!&ndash; <listcell>
+                            <listbox id="classroomsListBox" model="@load(each.specializationList)" >
+
+
+                                <template name="model">
+                                    <listitem>
+                                        <listcell label="@load(each.type)"/>
+
+
+                                    </listitem>
+                                </template>
+                            </listbox>
+                        </listcell>&ndash;&gt;
+                    </listitem>
+                </template>
+            </listbox>
+
+
+        </zk>
+                &lt;!&ndash;
+        The clinic is open from 9:00 to 18:00
+
+        [x] Monday from [15:00] to [17:00]
+        [ ] Tuesday
+        [x] Wednesday
+        [ ] Thursday
+        [x] Friday
+        [ ] Saturday
+
+        [ ] spec 1
+        [x] spec 2
+
+        &ndash;&gt;
+        -->

@@ -1,0 +1,122 @@
+<zk>
+    <include src="~./zul/template.zul"/>
+
+    <include templateURI="~./zul/template.zul"/>
+    <window apply="org.zkoss.bind.BindComposer"
+            border="normal" hflex="1" vflex="1" contentStyle="overflow:auto"
+            viewModel="@id('vm') @init('com.example.Clinic.spring.controllers.DoctorViewModel')">
+        <grid width="90%">
+            <columns>
+                <column label=""/>
+                <column label=""/>
+
+                <column label=""/>
+            </columns>
+            <rows>
+                <row>
+                    <hbox>
+                        <label value="Doctor's name"/>
+                    </hbox>
+                    <textbox value="@bind(vm.doctor.name)" name="name" width="200px"/>
+                </row>
+                <row>
+                    <hbox>
+                        <label value="Doctor's username "/>
+                    </hbox>
+                    <textbox value="@bind(vm.doctor.userName)" name="username"/>
+                </row>
+
+                <row>
+                    <hbox>
+                        <label value="Doctor's password "/>
+                    </hbox>
+
+
+                    <textbox type="password" value="@bind(vm.doctor.password)" name="password"/>
+                </row>
+
+                <row>
+                    <hbox>
+                        <label value=" Choose Doctor's Specializations "/>
+                    </hbox>
+                    <listbox id="specializationListBox" multiple="true" model="@load(vm.doctor.specializations)" vflex="1"
+                             fixedLayout="true"
+                             selectedItems="@bind(vm.specialization)"
+                             checkmark="true">
+                        <template name="model">
+                            <listitem>
+                                <listcell label="${each.type}" />
+                            </listitem>
+                        </template>
+                    </listbox>
+                </row>
+
+                <row>
+                    <hbox>
+                        <label value=" Choose Doctor's Availability "/>
+                    </hbox>
+
+                       <listbox id="availabilitiesListBoxDays" model="@load(vm.doctor.availability)" multiple="true"  vflex="1" fixedLayout="true"
+                                   selectedItems="@bind(vm.availability)"
+                                   checkmark="true">
+                          <template name="model" >
+
+                              <listitem>
+
+                                  <listcell label="${each.day}"/>
+
+                                  <listcell>
+
+                                  <textbox   value="@bind(each.start)"/>
+                              </listcell>
+                                  <listcell>
+                                      <textbox   value="@bind(each.end)"/>
+                                  </listcell>
+                              </listitem>
+                          </template>
+                          </listbox>
+
+
+                </row>
+    <!--            <row>
+                    <listbox vflex="1">
+                        <listhead>
+                            <listheader/>
+                            <listheader/>
+                        </listhead>
+                        <template name="model">
+                            <listitem checkable="true">
+                                <listcell>
+                                    <textbox value="@init(vm.beginOfDay) @save(vm.beginOfDay)"/>
+                                </listcell>
+                                <listcell>
+                                    <textbox value="@init(vm.endOfDay) @save(vm.endOfDay)"/>
+                                </listcell>
+                            </listitem>
+                        </template>
+                    </listbox>
+                </row>-->
+                <!--<listitem>
+
+                    <listcell>     Wednesday    From :</listcell> <listcell> <textbox  name="beginTime"/> </listcell> to : <listcell><textbox  name="endTime"/> </listcell>
+                </listitem>
+                                        <listitem>
+                                            <listcell label="Thursday From :"/><listcell> <textbox  name="beginTime"/>  </listcell>to :<listcell> <textbox  name="endTime"/> </listcell>
+                                        </listitem>
+
+
+                <listitem>
+                    <listcell  label="Friday From :"/><listcell> <textbox  name="beginTime"/> </listcell> to : <listcell> <textbox  name="endTime"/> </listcell>
+                </listitem>
+                                        <listitem>
+                                            <listcell>  Saturday From : </listcell>  <listcell><textbox  name="beginTime"/></listcell>  to :<listcell> <textbox  name="endTime"/> </listcell>
+                </listitem>
+
+                        <listitem>
+                            <listcell> Sunday From : </listcell><listcell> <textbox  name="beginTime"/> </listcell> to : <listcell><textbox  name="endTime"/></listcell>
+                                  </listitem>-->
+            </rows>
+        </grid>
+        <button onClick="@command('addDoctor')" label="Register"/>
+    </window>
+</zk>

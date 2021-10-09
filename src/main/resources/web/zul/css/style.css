@@ -1,0 +1,35 @@
+.container,.z-menubar-hor,.z-menubar-ver {
+    border: 1px solid #D8D8D8;
+
+}
+.z-menubar-hor {
+position:absolute; /*important*/
+    width: 580px;
+
+}
+.z-menubar-ver {
+    border-right: 0 none;
+    width: 149px;
+    height: 420px;
+}
+
+.container {
+    padding: 5px;
+}
+
+.z-menu-item-body {
+    padding: 5px 2px;
+     background-color:#3654eb;
+}
+.z-menubar-ver .z-menu-body,
+.z-menubar-ver .z-menu-item-body {
+    width: 140px !important;
+}
+
+.z-menubar-ver .z-menu-item-body .z-menu-item-inner-m,
+.z-menubar-ver .z-menu-body .z-menu-item-inner-m,
+.z-menubar-ver .z-menu-item-body .z-menu-inner-m,
+.z-menubar-ver .z-menu-body .z-menu-inner-m {
+    text-align: left;
+}
+

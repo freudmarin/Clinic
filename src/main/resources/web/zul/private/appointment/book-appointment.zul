@@ -1,0 +1,44 @@
+<zk>
+    <include src="~./zul/template.zul"/>
+
+    <include templateURI="~./zul/template.zul"/>
+
+
+    <div width="70%" height="60%"
+         viewModel="@id('vm') @init('com.example.Clinic.spring.controllers.BookAppointmentViewModel')">
+
+        <div style="margin-top:22px;">
+<label style="margin-left:100px;"  value="Reason of visit :"/>
+        <textbox  instant="true" width="200px" style="margin-left:110;"
+                 value="@bind(vm.reasonOfVisit)" onChange="@command('changeFilter')"/>
+         Choose Patient :
+            <combobox id="patientCombobox" model="@load(vm.allPatients)"
+                      autodrop="true">
+                <template name="model">
+                    <comboitem label="@load(each.name)" />
+                </template>
+            </combobox>
+
+        <listbox style="margin-left:100px;margin-top:10px;" model="@load(vm.allDoctors)" height="350px">
+
+
+            <listhead sizable="true">
+                <listheader width="30%" label="Doctor's ID"/>
+                <listheader width="30%" label="Name"/>
+                <listheader width="40% " label="Specialization"/>
+            </listhead>
+            <template name="model" var="doctor">
+                <listitem style="text-align:left;" >
+
+
+                    <listcell label="@load(doctor.id)"/>
+                    <listcell label="@load(doctor.name)"/>
+
+                    <listcell label="@load(doctor.specializationToString())"/>
+
+                </listitem>
+            </template>
+        </listbox>
+        </div>
+    </div>
+</zk>

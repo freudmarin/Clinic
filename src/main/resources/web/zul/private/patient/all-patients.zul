@@ -1,0 +1,41 @@
+<zk>
+<include src="~./zul/template.zul"/>
+
+<include templateURI="~./zul/template.zul"/>
+<window apply="org.zkoss.bind.BindComposer"
+        border="normal" hflex="1" vflex="1" contentStyle="overflow:auto"
+        viewModel="@id('vm') @init('com.example.Clinic.spring.controllers.PatientViewModel')">
+
+    <listbox id="classroomsListBox" model="@load(vm.patientsList)"  vflex="1">
+
+        <listhead sizable="true">
+            <listheader label="Patient's ID " width="300px"/>
+            <listheader label="Name" width="300px"/>
+
+            <listheader label="Date of Birth "/>
+        </listhead>
+        <template name="model">
+            <listitem>
+                <listcell label="@load(each.patientID)"/>
+                <listcell label="@load(each.name)"/>
+                <listcell label="@load(each.birthDateString)"/>
+
+            </listitem>
+        </template>
+    </listbox>
+</window>
+</zk>
+        <!--
+The clinic is open from 9:00 to 18:00
+
+[x] Monday from [15:00] to [17:00]
+[ ] Tuesday
+[x] Wednesday
+[ ] Thursday
+[x] Friday
+[ ] Saturday
+
+[ ] spec 1
+[x] spec 2
+
+-->

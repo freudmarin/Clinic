@@ -1,0 +1,50 @@
+<zk>
+
+    <zk if="${sessionScope.userLoggedIn !=null}">
+        <menubar id="menubar" autodrop="true">
+            <menu label="Patients">
+                <menupopup>
+                    <menuitem label="All Patients" href="~./zul/private/patient/all-patients.zul"/>
+                    <zk if="${sessionScope.userLoggedIn.role=='secretary'}">
+                        <menuitem
+                                label="Add Patient" href="~./zul/private/patient/add-patient.zul" />
+                    </zk>
+                </menupopup>
+            </menu>
+            <menu label="Doctor">
+                <menupopup>
+
+
+                    <menuitem label="All Doctors" href="~./zul/private/doctor/all-doctors.zul"/>
+                    <zk if="${sessionScope.userLoggedIn.role=='superuser'}">
+                        <menuitem label="Add Doctor"  href="~./zul/private/doctor/add-doctor.zul" />
+                    </zk>
+                </menupopup>
+            </menu>
+
+            <menu label="Appointments">
+
+                <menupopup>
+                    <zk if="${sessionScope.userLoggedIn.role=='superuser'}">
+
+                        <menuitem label="All Appointments" onClick="alert(self.label)"/>
+                    </zk>
+
+                    <zk if="${sessionScope.userLoggedIn.role=='doctor'}">
+                        <menuitem label="My appointments" onClick="alert(self.label)"/>
+                    </zk>
+                    <zk if="${sessionScope.userLoggedIn.role=='secretary'}">
+                        <menuitem label="Book Appointment" href="~./zul/private/appointment/book-appointment.zul" />
+                    </zk>
+                </menupopup>
+            </menu>
+            <menuitem style="margin-right:30px;" label="${sessionScope.message}" onClick="alert(self.label)"/>
+            <zk if="${sessionScope.userLoggedIn !=null}">
+                <menuitem style="float:right;" apply="com.example.Clinic.spring.controllers.LogOutController"
+                          id="logout" label="Logout" sclass="logout"/>
+            </zk>
+
+        </menubar>
+    </zk>
+</zk>
+

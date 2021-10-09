@@ -1,0 +1,30 @@
+<zk>
+
+
+<window  viewModel="@id('vm') @init('com.example.Clinic.spring.controllers.LogInViewModel')" style="margin-left:30px;margin-right=30px;margin-top:100px;width:70%" title="Login in " border="normal" hflex="min">
+
+    <div align="center">
+        <vbox hflex="min" align="center">
+
+            <hbox>
+                <label value="Username"/>
+            </hbox>
+            <textbox value="@bind(vm.username)" height="50px" />
+
+            <hbox>
+                <label value="Password"/>
+            </hbox>
+            <textbox  value="@bind(vm.password)" type="password" height="50px" />
+
+
+          <!--  <textbox visible="false" name="from" value="request.getRequestURI() "/>-->
+
+            <button onClick="@command('login')" label="Login"/>
+            <label value="@load(vm.errorMessage)"  />
+        </vbox>
+
+
+
+    </div>
+</window>
+</zk>
