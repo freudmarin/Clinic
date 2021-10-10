@@ -60,14 +60,10 @@ if(reason!=null && !reason.equals("")) {
 else {
     doctorList = doctorRepository.findAll();
 }
-
-
-
 return doctorList;
     }
     public void addDoctor(Doctor doctor) {
         doctorRepository.save(doctor);
-
     }
 
     public List<Specialization> getSpecialization() {
@@ -75,7 +71,9 @@ return doctorList;
     }
     public void addAvailability(Availability availability) {
         availabilityRepository.save(availability);
-
+    }
+    public Reason   getReason(String reason) {
+    return  reasonRepository.findByReason(reason);
     }
 
 }

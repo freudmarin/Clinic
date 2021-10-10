@@ -40,7 +40,12 @@ public class Availability {
         this.endTime = endTime;
         this.doctor = doctor;
     }
+    public Availability(DayOfWeek dayOfWeek, LocalTime beginTime, LocalTime endTime) {
+        this.dayOfWeek = dayOfWeek;
+        this.beginTime = beginTime;
+        this.endTime = endTime;
 
+    }
     public Availability() {
     }
 

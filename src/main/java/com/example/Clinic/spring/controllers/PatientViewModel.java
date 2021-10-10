@@ -16,8 +16,8 @@ import java.util.Date;
 import java.util.List;
 
 @VariableResolver(DelegatingVariableResolver.class)
-public class PatientViewModel {
-    private int id;
+public class PatientViewModel  extends ReasonView{
+
     private String patientID;
     private String name;
     private Date dateOfBirth;
@@ -29,9 +29,7 @@ public class PatientViewModel {
     @WireVariable
     PatientService patientService;
 
-    public int getId() {
-        return id;
-    }
+
 
     public String getPatientID() {
         return patientID;
@@ -90,6 +88,17 @@ result = new PatientViewModel(patient.getPatientID(),patient.getName(),patient.g
 
   }
 
+    public Patient convertViewToPatient(PatientViewModel patient)
+    {
+        Patient result = null;
+
+        if (patient != null) {
+
+            result = new Patient(patient.getPatientID(),patient.getName(),patient.getDateOfBirth());
+        }
+        return result;
+
+    }
     @Command
     @NotifyChange()
     public void add() {

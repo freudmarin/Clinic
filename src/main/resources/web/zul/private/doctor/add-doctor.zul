@@ -117,6 +117,8 @@
                                   </listitem>-->
             </rows>
         </grid>
+
+
         <button onClick="@command('addDoctor')" label="Register"/>
     </window>
 </zk>

@@ -14,6 +14,8 @@ public class Doctor extends User {
 
 
     @OneToMany(mappedBy = "doctor")
+
+
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Availability> availabilityList;
 
@@ -30,8 +32,6 @@ public class Doctor extends User {
     @OneToMany(mappedBy = "doctor")
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Appointment> appointmentListList;
-
-
     public Doctor(String role, String username, String password, String name, List<Specialization> specializationList) {// List<Appointment> appointmentListList) {
         super(role, username, password, name);
 
@@ -39,6 +39,14 @@ public class Doctor extends User {
         this.specializationList = specializationList;
         // this.appointmentListList = appointmentListList;
     }
+    public Doctor(Long id,String role, String username, String password, String name, List<Specialization> specializationList) {// List<Appointment> appointmentListList) {
+        super(id,role, username, password, name);
+
+        //  this.availabilityList = availabilityList;
+        this.specializationList = specializationList;
+        // this.appointmentListList = appointmentListList;
+    }
+
 
     public Doctor() {
     }

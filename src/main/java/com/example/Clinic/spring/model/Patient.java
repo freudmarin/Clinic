@@ -1,5 +1,7 @@
 package com.example.Clinic.spring.model;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 import javax.annotation.Generated;
@@ -28,6 +30,7 @@ public class Patient {
     private String name;
     private Date dateOfBirth;
     @OneToMany(mappedBy = "patient")
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Appointment> appointments;
 
     public Patient() {

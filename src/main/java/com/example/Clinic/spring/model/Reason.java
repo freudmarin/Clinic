@@ -24,7 +24,12 @@ import javax.persistence.*;
             this.specialization = specialization;
             this.appointment = appointment;
         }
+        public Reason(Integer id,String reason) {
+        this.id =id;
+        this.reason = reason;
 
+
+        }
         public Reason() {
         }
 

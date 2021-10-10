@@ -1,12 +1,18 @@
 package com.example.Clinic.spring.controllers;
 
+import com.example.Clinic.spring.model.Patient;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class AppointmentView {
     Integer id;
-    String appointmentDate;
+    Date appointmentDate;
     DoctorView doctor;
-    PatientViewModel patient;
-    String reason;
-    public AppointmentView(Integer id, String appointmentDate, DoctorView doctor, PatientViewModel patient, String reason) {
+    Patient patient;
+    ReasonView reason;
+    public AppointmentView(Integer id,Date appointmentDate, DoctorView doctor, Patient patient, ReasonView reason) {
         this.id = id;
         this.appointmentDate = appointmentDate;
         this.doctor = doctor;
@@ -14,6 +20,13 @@ public class AppointmentView {
         this.reason = reason;
     }
 
+
+    public AppointmentView() {
+    }
+    public String ConvertDateToString() throws ParseException {
+
+return  this.appointmentDate.toString();
+    }
     public Integer getId() {
         return id;
     }
@@ -22,11 +35,11 @@ public class AppointmentView {
         this.id = id;
     }
 
-    public String getAppointmentDate() {
+    public Date getAppointmentDate() {
         return appointmentDate;
     }
 
-    public void setAppointmentDate(String appointmentDate) {
+    public void setAppointmentDate(Date appointmentDate) {
         this.appointmentDate = appointmentDate;
     }
 
@@ -38,19 +51,19 @@ public class AppointmentView {
         this.doctor = doctor;
     }
 
-    public PatientViewModel getPatient() {
+    public Patient getPatient() {
         return patient;
     }
 
-    public void setPatient(PatientViewModel patient) {
+    public void setPatient(Patient patient) {
         this.patient = patient;
     }
 
-    public String getReason() {
+    public ReasonView getReason() {
         return reason;
     }
 
-    public void setReason(String reason) {
+    public void setReason(ReasonView reason) {
         this.reason = reason;
     }
 }

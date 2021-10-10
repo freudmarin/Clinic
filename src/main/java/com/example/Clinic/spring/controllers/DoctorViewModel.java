@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @VariableResolver(DelegatingVariableResolver.class)
-public class DoctorViewModel {
+public class DoctorViewModel extends PatientViewModel {
     @WireVariable
     DoctorService doctorService;
 
@@ -79,6 +79,8 @@ public class DoctorViewModel {
     }
 
 
+
+    @Init
     public void initSetup() {
         this.allDoctors = doctorService.getAllDoctors().stream().map(this::convertDoctorToView).collect(Collectors.toList());
         this.doctor = new DoctorView();
@@ -104,8 +106,18 @@ public class DoctorViewModel {
         }
 
         return result;
-    }
+    }public  Doctor convertViewToDoctor(DoctorView doctorView) {
+        Doctor result = null;
 
+        if (doctor != null) {
+            result = new Doctor(doctorView.getId(),"doctor", doctorView.getName(), doctorView.getUserName(), doctorView.getPassword(),
+
+
+                    doctorView.getSpecializations().stream().map(spec -> new Specialization(spec.getId(), spec.getType())).collect(Collectors.toList()));
+        }
+
+        return result;
+    }
     @Command
     @NotifyChange()
     public void addDoctor() {

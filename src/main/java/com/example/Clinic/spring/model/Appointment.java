@@ -1,5 +1,8 @@
 package com.example.Clinic.spring.model;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -8,7 +11,8 @@ import java.util.Date;
 public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
+
 
 
     @ManyToOne
@@ -25,8 +29,15 @@ public class Appointment {
 
     @OneToOne(optional = false)
     @JoinColumn(name = "reasonID")
+    @LazyCollection(LazyCollectionOption.FALSE)
     private Reason reason;
+    public Integer getId() {
+        return id;
+    }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
     public Appointment() {
     }
 
@@ -37,14 +48,14 @@ public class Appointment {
         this.dateOfAppointment = dateOfAppointment;
         this.reason = reason;
     }
-
-    public int getId() {
-        return id;
+    public Appointment(Integer id,Doctor doctor, Patient patient, Date dateOfAppointment, Reason reason) {
+this.id=id;
+        this.doctor = doctor;
+        this.patient = patient;
+        this.dateOfAppointment = dateOfAppointment;
+        this.reason = reason;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public Doctor getDoctor() {
         return doctor;

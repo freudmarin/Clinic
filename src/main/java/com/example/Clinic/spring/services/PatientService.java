@@ -29,4 +29,8 @@ public class PatientService {
         } else
             return null;
     }
+    public Patient findPatientById(Patient patient)
+    {
+        return patientRepository.findById(patient.getId());
+    }
 }
