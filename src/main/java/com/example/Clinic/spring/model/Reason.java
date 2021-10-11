@@ -15,14 +15,14 @@ import javax.persistence.*;
         private Specialization specialization;
 
 
-        @OneToOne(mappedBy = "reason")
-        private Appointment appointment;
+       /* @OneToOne(mappedBy = "reason")
+        private Appointment appointment;*/
 
-        public Reason( String reason, Specialization specialization, Appointment appointment) {
+        public Reason( String reason, Specialization specialization){//, Appointment appointment) {
 
             this.reason = reason;
             this.specialization = specialization;
-            this.appointment = appointment;
+        //    this.appointment = appointment;
         }
         public Reason(Integer id,String reason) {
         this.id =id;
@@ -52,16 +52,8 @@ import javax.persistence.*;
         public Specialization getSpecialization() {
             return specialization;
         }
-
         public void setSpecialization(Specialization specialization) {
             this.specialization = specialization;
         }
 
-        public Appointment getAppointment() {
-            return appointment;
-        }
-
-        public void setAppointment(Appointment appointment) {
-            this.appointment = appointment;
-        }
     }

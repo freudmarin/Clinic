@@ -176,7 +176,7 @@ Patient patientPersistence = new Patient();
     @Command
     @NotifyChange()
     public void addAppointment() {
-        Appointment appointment = new Appointment(this.appointment.getId(),this.convertViewToDoctor(this.appointment.doctor),this.appointment.patient, this.appointment.appointmentDate, this.doctorService.getReason(this.reasonOfVisit));
+        Appointment appointment = new Appointment(this.appointment.getId(),this.convertViewToDoctor(this.appointment.doctor),this.appointment.patient, this.appointment.appointmentDate, this.doctorService.getReason(this.reasonOfVisit).getReason());
         appointmentService.addAppointment(appointment);
 
         Messagebox.show("Appointment booked successfully", "Success", Messagebox.OK, Messagebox.INFORMATION);

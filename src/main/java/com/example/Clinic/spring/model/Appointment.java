@@ -26,11 +26,11 @@ public class Appointment {
 
 
     private Date dateOfAppointment;
-
-    @OneToOne(optional = false)
+private String reason;
+ /*   @OneToOne(optional = false)
     @JoinColumn(name = "reasonID")
     @LazyCollection(LazyCollectionOption.FALSE)
-    private Reason reason;
+    private Reason reason;*/
     public Integer getId() {
         return id;
     }
@@ -41,14 +41,14 @@ public class Appointment {
     public Appointment() {
     }
 
-    public Appointment(Doctor doctor, Patient patient, Date dateOfAppointment, Reason reason) {
+    public Appointment(Doctor doctor, Patient patient, Date dateOfAppointment, String  reason) {
 
         this.doctor = doctor;
         this.patient = patient;
         this.dateOfAppointment = dateOfAppointment;
         this.reason = reason;
     }
-    public Appointment(Integer id,Doctor doctor, Patient patient, Date dateOfAppointment, Reason reason) {
+   public Appointment(Integer id,Doctor doctor, Patient patient, Date dateOfAppointment, String  reason) {
 this.id=id;
         this.doctor = doctor;
         this.patient = patient;
@@ -81,11 +81,11 @@ this.id=id;
         this.dateOfAppointment = dateOfAppointment;
     }
 
-    public Reason getReason() {
+    public String getReason() {
         return reason;
     }
 
-    public void setReason(Reason reason) {
+    public void setReason(String reason) {
         this.reason = reason;
     }
 }
