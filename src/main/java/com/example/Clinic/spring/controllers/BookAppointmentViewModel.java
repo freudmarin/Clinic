@@ -180,6 +180,7 @@ Patient patientPersistence = new Patient();
         appointmentService.addAppointment(appointment);
 
         Messagebox.show("Appointment booked successfully", "Success", Messagebox.OK, Messagebox.INFORMATION);
+  //test
     }
 
 /*    public  Appointment convertViewToAppointment(AppointmentView appointmentView) throws ParseException {
