@@ -10,7 +10,7 @@
 
             <listhead sizable="true">
                 <listheader label="Appointment's ID " width="300px"/>
-                <listheader label="Doctor's Name" width="300px"/>
+
                 <listheader label="Date of Appointment" width="300px"/>
 
 
@@ -24,7 +24,7 @@
                 <listitem>
 
                     <listcell label="@load(appointment.id)"/>
-                    <listcell label="@load(appointment.getDoctorName())"/>
+
                     <listcell label="@load(appointment.ConvertDateToString())"/>
                     <listcell label="@load(appointment.getPatientName())"/>
                     <listcell label="@load(appointment.reason)"/>
@@ -33,6 +33,8 @@
                 </listitem>
             </template>
         </listbox>
+
+
 
 
     </window>

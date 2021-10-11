@@ -8,12 +8,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class AppointmentView {
-    Integer id;
+    Long id;
     Date appointmentDate;
     DoctorView doctor;
     Patient patient;
     String reason;
-    public AppointmentView(Integer id,Date appointmentDate, DoctorView doctor, Patient patient, String  reason) {
+    public AppointmentView(Long  id,Date appointmentDate, DoctorView doctor, Patient patient, String  reason) {
         this.id = id;
         this.appointmentDate = appointmentDate;
         this.doctor = doctor;
@@ -31,11 +31,12 @@ public class AppointmentView {
 
 return  this.appointmentDate.toString();
     }
-    public Integer getId() {
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

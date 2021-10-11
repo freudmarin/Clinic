@@ -1,5 +1,4 @@
 package com.example.Clinic.spring.controllers;
-
 import com.example.Clinic.spring.model.Patient;
 import com.example.Clinic.spring.services.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,21 +15,17 @@ import java.util.Date;
 import java.util.List;
 
 @VariableResolver(DelegatingVariableResolver.class)
-public class PatientViewModel  extends ReasonView{
+public class PatientViewModel extends ReasonView {
 
     private String patientID;
     private String name;
     private Date dateOfBirth;
-
     public PatientService getPatientService() {
         return patientService;
     }
 
     @WireVariable
     PatientService patientService;
-
-
-
     public String getPatientID() {
         return patientID;
     }
@@ -75,30 +70,28 @@ public class PatientViewModel  extends ReasonView{
     public PatientViewModel() {
 
     }
-
-  private PatientViewModel convertToPatientView(Patient patient)
-  {
-      PatientViewModel result = null;
-
-      if (patient != null) {
-
-result = new PatientViewModel(patient.getPatientID(),patient.getName(),patient.getDateOfBirth());
-      }
-      return result;
-
-  }
-
-    public Patient convertViewToPatient(PatientViewModel patient)
-    {
-        Patient result = null;
+    private PatientViewModel convertToPatientView(Patient patient) {
+        PatientViewModel result = null;
 
         if (patient != null) {
 
-            result = new Patient(patient.getPatientID(),patient.getName(),patient.getDateOfBirth());
+            result = new PatientViewModel(patient.getPatientID(), patient.getName(), patient.getDateOfBirth());
         }
         return result;
 
     }
+
+    public Patient convertViewToPatient(PatientViewModel patient) {
+        Patient result = null;
+
+        if (patient != null) {
+
+            result = new Patient(patient.getPatientID(), patient.getName(), patient.getDateOfBirth());
+        }
+        return result;
+
+    }
+
     @Command
     @NotifyChange()
     public void add() {

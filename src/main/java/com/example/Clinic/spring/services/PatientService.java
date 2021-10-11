@@ -1,15 +1,12 @@
 package com.example.Clinic.spring.services;
-
 import com.example.Clinic.spring.model.Availability;
 import com.example.Clinic.spring.model.Patient;
 import com.example.Clinic.spring.repository.AvailabilityRepository;
 import com.example.Clinic.spring.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
-
 @Service
 public class PatientService {
     @Autowired
@@ -17,9 +14,7 @@ public class PatientService {
 
     public List<Patient> getAllPatients() {
         return patientRepository.findAll();
-
     }
-
     public Patient addPatient(Patient patient) {
         Patient patientFromDatabase = patientRepository.findByPatientID(patient.getPatientID());
 //If doesn't exists on database

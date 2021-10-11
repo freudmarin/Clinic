@@ -31,7 +31,7 @@
                     </zk>
 
                     <zk if="${sessionScope.userLoggedIn.role=='doctor'}">
-                        <menuitem label="My appointments" onClick="alert(self.label)"/>
+                        <menuitem label="My appointments" href="~./zul/private/appointment/my-appointments.zul"/>
                     </zk>
                     <zk if="${sessionScope.userLoggedIn.role=='secretary'}">
                         <menuitem label="Book Appointment" href="~./zul/private/appointment/book-appointment.zul" />

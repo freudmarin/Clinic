@@ -23,11 +23,12 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatterBuilder;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @VariableResolver(DelegatingVariableResolver.class)
 public class BookAppointmentViewModel extends DoctorViewModel {
-    List<AppointmentView> allAppointments;
+
     List<DoctorView> allDoctors;
     List<Patient> allPatients;
     AppointmentView appointment = new AppointmentView();
@@ -44,8 +45,6 @@ public class BookAppointmentViewModel extends DoctorViewModel {
     AppointmentService appointmentService;
 
 
-    @WireVariable
-    AuthenticationService authenticationService;
 
     public PatientService getPatientService() {
         return patientService;
@@ -76,13 +75,7 @@ public class BookAppointmentViewModel extends DoctorViewModel {
     public BookAppointmentViewModel() {
     }
 
-    public List<AppointmentView> getAllAppointments() {
-        return allAppointments;
-    }
 
-    public void setAllAppointments(List<AppointmentView> allAppointments) {
-        this.allAppointments = allAppointments;
-    }
 
     public DoctorView getSelectedDoctor() {
         return selectedDoctor;
@@ -142,37 +135,17 @@ public class BookAppointmentViewModel extends DoctorViewModel {
     }
 
 
-    public AuthenticationService getAuthenticationService() {
-        return authenticationService;
-    }
 
-    public void setAuthenticationService(AuthenticationService authenticationService) {
-        this.authenticationService = authenticationService;
-    }
 
     @Init(superclass = true)
     public void BookAppointmentInitSetup() {
-   /*     User user =authenticationService.getUserData();
-
-        if(authenticationService.getUserRole(user.getId()).equals("doctor"))
-        {
-            this.allAppointments = appointmentService.getAllAppointments().stream().map(this::convertAppointmentToView).collect(Collectors.toList());
-
-        }
-     //this is for the allApointments.zul
-
-        {*/
-        //}
-
-        //this is for the allAppointments.zul
-        this.allAppointments = appointmentService.getAllAppointments().stream().map(this::convertAppointmentToView).collect(Collectors.toList());
 
 
-        //this is for the book-appointment.zul
-        this.allDoctors = super.doctorService.getAllDoctors().stream().map(this::convertDoctorToView).collect(Collectors.toList());
-        this.allPatients = patientService.getAllPatients();
+            //this is for the book-appointment.zul
+            this.allDoctors = super.doctorService.getAllDoctors().stream().map(this::convertDoctorToView).collect(Collectors.toList());
+            this.allPatients = patientService.getAllPatients();
+
     }
-
     @Command
     @NotifyChange({"allDoctors"})
     public void changeFilter() {

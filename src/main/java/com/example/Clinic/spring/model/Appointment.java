@@ -11,7 +11,7 @@ import java.util.Date;
 public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
 
 
@@ -31,11 +31,11 @@ private String reason;
     @JoinColumn(name = "reasonID")
     @LazyCollection(LazyCollectionOption.FALSE)
     private Reason reason;*/
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long  id) {
         this.id = id;
     }
     public Appointment() {
@@ -48,7 +48,7 @@ private String reason;
         this.dateOfAppointment = dateOfAppointment;
         this.reason = reason;
     }
-   public Appointment(Integer id,Doctor doctor, Patient patient, Date dateOfAppointment, String  reason) {
+   public Appointment(Long id,Doctor doctor, Patient patient, Date dateOfAppointment, String  reason) {
 this.id=id;
         this.doctor = doctor;
         this.patient = patient;
