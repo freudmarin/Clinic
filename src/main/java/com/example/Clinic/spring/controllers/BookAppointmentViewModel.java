@@ -2,6 +2,7 @@ package com.example.Clinic.spring.controllers;
 
 import com.example.Clinic.spring.model.*;
 import com.example.Clinic.spring.services.AppointmentService;
+import com.example.Clinic.spring.services.AuthenticationService;
 import com.example.Clinic.spring.services.DoctorService;
 import com.example.Clinic.spring.services.PatientService;
 import org.zkoss.bind.annotation.Command;
@@ -17,6 +18,7 @@ import org.zkoss.zul.Messagebox;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatterBuilder;
 import java.util.List;
@@ -28,19 +30,12 @@ public class BookAppointmentViewModel extends DoctorViewModel {
     List<AppointmentView> allAppointments;
     List<DoctorView> allDoctors;
     List<Patient> allPatients;
-
-
-
-
     AppointmentView appointment = new AppointmentView();
-ReasonView reason=new ReasonView();
-
+    ReasonView reason = new ReasonView();
     //public PatientViewModel patientPersistence;
     DoctorView selectedDoctor = new DoctorView();
-
-
     Patient selectedPatient = new Patient();
-Patient patientPersistence = new Patient();
+    Patient patientPersistence = new Patient();
     @WireVariable
     PatientService patientService;
     @WireVariable
@@ -48,11 +43,15 @@ Patient patientPersistence = new Patient();
     @WireVariable
     AppointmentService appointmentService;
 
+
+    @WireVariable
+    AuthenticationService authenticationService;
+
     public PatientService getPatientService() {
         return patientService;
     }
 
-    public  String reasonOfVisit;
+    public String reasonOfVisit;
 
     public String getReasonOfVisit() {
         return reasonOfVisit;
@@ -77,6 +76,13 @@ Patient patientPersistence = new Patient();
     public BookAppointmentViewModel() {
     }
 
+    public List<AppointmentView> getAllAppointments() {
+        return allAppointments;
+    }
+
+    public void setAllAppointments(List<AppointmentView> allAppointments) {
+        this.allAppointments = allAppointments;
+    }
 
     public DoctorView getSelectedDoctor() {
         return selectedDoctor;
@@ -119,41 +125,12 @@ Patient patientPersistence = new Patient();
         this.doctorService = doctorService;
     }
 
-    public void setPatientService(PatientService patientService) {
-        this.patientService = patientService;
-    }
-
     public AppointmentService getAppointmentService() {
         return appointmentService;
     }
 
-
-
-    @Init(superclass = true)
-    public void BookAppointmentInitSetup() {
-
-        this.allDoctors = super.doctorService.getAllDoctors().stream().map(this::convertDoctorToView).collect(Collectors.toList());
-        this.allPatients = patientService.getAllPatients();
-
-
-
-    }
-
-    @Command
-    @NotifyChange({"allDoctors"})
-    public void changeFilter() {
-        this.allDoctors = super.doctorService.getDoctorsByVisitReason(reasonOfVisit).stream().map(this::convertDoctorToView).collect(Collectors.toList());
-
-    }
-
-    @Command //@Command declares a command method
-    @NotifyChange({"appointment"})
-    public void selectedDoctor() {
-
-        //  this.appointment.doctor.name=this.selectedDoctor.name;
-
-        this.appointment.doctor = this.selectedDoctor;
-
+    public void setAppointmentService(AppointmentService appointmentService) {
+        this.appointmentService = appointmentService;
     }
 
     public Patient getSelectedPatient() {
@@ -164,57 +141,78 @@ Patient patientPersistence = new Patient();
         this.selectedPatient = selectedPatient;
     }
 
-    @Command //@Command declares a command method
-    @NotifyChange({"patientPersistence","appointment"})
-    public void selectedPatient() {
 
-      this.patientPersistence= patientService.findPatientById(this.selectedPatient);
-
-      this.appointment.patient=this.patientPersistence;
-
+    public AuthenticationService getAuthenticationService() {
+        return authenticationService;
     }
+
+    public void setAuthenticationService(AuthenticationService authenticationService) {
+        this.authenticationService = authenticationService;
+    }
+
+    @Init(superclass = true)
+    public void BookAppointmentInitSetup() {
+   /*     User user =authenticationService.getUserData();
+
+        if(authenticationService.getUserRole(user.getId()).equals("doctor"))
+        {
+            this.allAppointments = appointmentService.getAllAppointments().stream().map(this::convertAppointmentToView).collect(Collectors.toList());
+
+        }
+     //this is for the allApointments.zul
+
+        {*/
+        //}
+
+        //this is for the allAppointments.zul
+        this.allAppointments = appointmentService.getAllAppointments().stream().map(this::convertAppointmentToView).collect(Collectors.toList());
+
+
+        //this is for the book-appointment.zul
+        this.allDoctors = super.doctorService.getAllDoctors().stream().map(this::convertDoctorToView).collect(Collectors.toList());
+        this.allPatients = patientService.getAllPatients();
+    }
+
+    @Command
+    @NotifyChange({"allDoctors"})
+    public void changeFilter() {
+        this.allDoctors = super.doctorService.getDoctorsByVisitReason(reasonOfVisit).stream().map(this::convertDoctorToView).collect(Collectors.toList());
+    }
+
+    @Command //@Command declares a command method
+    @NotifyChange({"appointment"})
+    public void selectedDoctor() {
+        this.appointment.doctor = this.selectedDoctor;
+    }
+
+    @Command //@Command declares a command method
+    @NotifyChange({"patientPersistence", "appointment"})
+    public void selectedPatient() {
+        this.patientPersistence = patientService.findPatient(this.selectedPatient);
+        this.appointment.patient = this.patientPersistence;
+    }
+
     @Command
     @NotifyChange()
     public void addAppointment() {
-        Appointment appointment = new Appointment(this.appointment.getId(),this.convertViewToDoctor(this.appointment.doctor),this.appointment.patient, this.appointment.appointmentDate, this.doctorService.getReason(this.reasonOfVisit).getReason());
+      /*  List<Availability> doctorAvailabilitiesFromDb= doctorService.getAvailabilityByDoctor(this.convertViewToDoctor(this.appointment.doctor));
+        for(Availability availability:doctorAvailabilitiesFromDb)
+        {
+            if(availability.getDayOfWeek().equals(DayOfWeek.parse(this.appointment.appointmentDate.getDay())
+        }*/
+        Appointment appointment = new Appointment(this.appointment.getId(), this.convertViewToDoctor(this.appointment.doctor), this.appointment.patient, this.appointment.appointmentDate, this.doctorService.getReason(this.reasonOfVisit).getReason());
         appointmentService.addAppointment(appointment);
-
         Messagebox.show("Appointment booked successfully", "Success", Messagebox.OK, Messagebox.INFORMATION);
-  //test
     }
 
-/*    public  Appointment convertViewToAppointment(AppointmentView appointmentView) throws ParseException {
-        Appointment result = null;
-        SimpleDateFormat formatter=new SimpleDateFormat("dd/MM/yyyy");
-        if (appointmentView != null) {
-            result = new Appointment(appointmentView.getDoctor(), appointmentView.getPatient(), formatter.parse(appointmentView.getAppointmentDate()), appointmentView.getDoctor());
-                    doctor.getAvailabilityList().stream().map(avl ->
-                            new AvailabilityView(avl.getDayOfWeek(),
-                                    avl.getBeginTime() != null ? avl.getBeginTime().format(new DateTimeFormatterBuilder().toFormatter(Locale.ITALY)) : "8:00",
-                                    avl.getEndTime() != null ? avl.getEndTime().format(new DateTimeFormatterBuilder().toFormatter(Locale.ITALY)) : "19:00")).collect(Collectors.toList()),
-                    doctor.getSpecializationList().stream().map(spec -> new SpecializationView(spec.getId(), spec.getType())).collect(Collectors.toList()));
+    public AppointmentView convertAppointmentToView(Appointment appointment) {
+        AppointmentView result = null;
+        //  SimpleDateFormat formatter=new SimpleDateFormat("dd/MM/yyyy");
+        if (appointment != null) {
+            result = new AppointmentView(appointment.getId(), appointment.getDateOfAppointment(), convertDoctorToView(appointment.getDoctor()), appointment.getPatient(), appointment.getReason());
+
         }
-
-
-
         return result;
-    }*/
-   /*     Doctor doctor = new Doctor("doctor", this.doctor.userName, this.doctor.password, this.doctor.name,
-                this.specialization.stream().map(specializationView -> new Specialization(specializationView.getId(), specializationView.getType())).collect(Collectors.toList()));
-        doctorService.addDoctor(doctor);
-        boolean validHour = true;
-        //this.doctor.availability - from view
-        for (AvailabilityView avView : this.doctor.availability) {
-            if (LocalTime.parse(avView.getEnd()).isBefore(LocalTime.of(19, 01)) && LocalTime.parse(avView.getStart()).isAfter(LocalTime.of(7, 59))) {
-                Availability availability = new Availability(avView.getDay(), LocalTime.parse(avView.getStart()), LocalTime.parse(avView.getEnd()), doctor);
-                doctorService.addAvailability(availability);
-            } else {
-                validHour = false;
-                Messagebox.show("The clinic is not opened in this time", "Success", Messagebox.OK, Messagebox.INFORMATION);
-                break;
-            }
-        }
-        if (validHour)
-            Messagebox.show("Doctor added successfully", "Success", Messagebox.OK, Messagebox.INFORMATION);
-    }*/
+    }
+
 }

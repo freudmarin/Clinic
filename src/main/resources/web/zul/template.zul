@@ -27,7 +27,7 @@
                 <menupopup>
                     <zk if="${sessionScope.userLoggedIn.role=='superuser'}">
 
-                        <menuitem label="All Appointments" onClick="alert(self.label)"/>
+                        <menuitem label="All Appointments"  href="~./zul/private/appointment/all-appointments.zul"/>
                     </zk>
 
                     <zk if="${sessionScope.userLoggedIn.role=='doctor'}">

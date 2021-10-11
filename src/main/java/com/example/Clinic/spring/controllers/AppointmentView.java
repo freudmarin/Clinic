@@ -1,5 +1,6 @@
 package com.example.Clinic.spring.controllers;
 
+import com.example.Clinic.spring.model.Doctor;
 import com.example.Clinic.spring.model.Patient;
 
 import java.text.ParseException;
@@ -11,8 +12,8 @@ public class AppointmentView {
     Date appointmentDate;
     DoctorView doctor;
     Patient patient;
-    ReasonView reason;
-    public AppointmentView(Integer id,Date appointmentDate, DoctorView doctor, Patient patient, ReasonView reason) {
+    String reason;
+    public AppointmentView(Integer id,Date appointmentDate, DoctorView doctor, Patient patient, String  reason) {
         this.id = id;
         this.appointmentDate = appointmentDate;
         this.doctor = doctor;
@@ -23,7 +24,10 @@ public class AppointmentView {
 
     public AppointmentView() {
     }
-    public String ConvertDateToString() throws ParseException {
+
+
+
+    public String ConvertDateToString() {
 
 return  this.appointmentDate.toString();
     }
@@ -59,11 +63,22 @@ return  this.appointmentDate.toString();
         this.patient = patient;
     }
 
-    public ReasonView getReason() {
+    public String getReason() {
         return reason;
     }
 
-    public void setReason(ReasonView reason) {
+    public void setReason(String reason) {
         this.reason = reason;
+    }
+
+    public String  getDoctorName()
+    {
+        return this.doctor.name;
+    }
+
+
+    public String  getPatientName()
+    {
+        return this.patient.getName();
     }
 }

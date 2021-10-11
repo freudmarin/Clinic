@@ -14,7 +14,9 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.print.Doc;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DoctorService {
@@ -48,6 +50,17 @@ public class DoctorService {
 //
 //        return all;
     }
+   /* public Doctor getDoctorById(Long id) {
+        return doctorRepository.findById(id);*/
+//        List<Doctor> all = doctorRepository.findAll();
+//        all.forEach(doctor -> {
+//            doctor.getAvailabilityList().stream().count();
+//            doctor.getSpecializationList().stream().count();
+//            doctor.getAppointmentListList().stream().count();
+//        });
+//
+//        return all;
+
 
     public List<Doctor> getDoctorsByVisitReason(String  reason) {
         List<Doctor> doctorList;
@@ -75,5 +88,8 @@ return doctorList;
     public Reason   getReason(String reason) {
     return  reasonRepository.findByReason(reason);
     }
-
+public List<Availability> getAvailabilityByDoctor (Doctor doctor)
+{
+    return availabilityRepository.findByDoctor(doctor);
+}
 }

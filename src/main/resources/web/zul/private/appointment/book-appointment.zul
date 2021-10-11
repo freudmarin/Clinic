@@ -24,7 +24,7 @@
                       value="@bind(vm.appointment.doctor.name)" readonly="true" />
 
             Choose appointment date :
-            <datebox  instant="true" width="200px" style="margin-left:200;"
+            <datebox  format="long+medium" instant="true" width="200px" style="margin-left:200;"
                       value="@bind(vm.appointment.appointmentDate)" />
         <listbox style="margin-left:100px;margin-top:10px;" model="@load(vm.allDoctors)"   onSelect="@command('selectedDoctor')" selectedItem="@bind(vm.selectedDoctor)" height="350px">
 

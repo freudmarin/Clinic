@@ -9,9 +9,10 @@
         <listbox id="doctorListBox" model="@load(vm.allDoctors)" vflex="1">
 
             <listhead sizable="true">
-                <listheader label="Doctor's ID " width="300px"/>
-                <listheader label="Name" width="300px"/>
+                <listheader label="Doctor's ID " width="100px"/>
 
+
+                <listheader label="Name" width="300px"/>
                 <listheader label="Username" width="300px"/>
                 <listheader label="Specializations" width="300px"/>
 

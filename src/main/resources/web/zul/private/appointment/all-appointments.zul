@@ -1,0 +1,40 @@
+<zk>
+    <include src="~./zul/template.zul"/>
+
+    <include templateURI="~./zul/template.zul"/>
+    <window apply="org.zkoss.bind.BindComposer"
+            border="normal" hflex="1" vflex="1" contentStyle="overflow:auto"
+            viewModel="@id('vm') @init('com.example.Clinic.spring.controllers.BookAppointmentViewModel')">
+
+        <listbox id="appointmentListBox" model="@load(vm.allAppointments)" vflex="1">
+
+            <listhead sizable="true">
+                <listheader label="Appointment's ID " width="300px"/>
+                <listheader label="Doctor's Name" width="300px"/>
+                <listheader label="Date of Appointment" width="300px"/>
+
+
+
+                <listheader label="Patient's Name" width="300px"/>
+                <listheader label="Reason of Visit" width="300px"/>
+
+
+            </listhead>
+            <template name="model" var="appointment">
+                <listitem>
+
+                    <listcell label="@load(appointment.id)"/>
+                    <listcell label="@load(appointment.getDoctorName())"/>
+                    <listcell label="@load(appointment.ConvertDateToString())"/>
+                    <listcell label="@load(appointment.getPatientName())"/>
+                    <listcell label="@load(appointment.reason)"/>
+
+
+                </listitem>
+            </template>
+        </listbox>
+
+
+    </window>
+
+</zk>

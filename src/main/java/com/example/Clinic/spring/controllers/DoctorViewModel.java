@@ -45,6 +45,7 @@ public class DoctorViewModel extends PatientViewModel {
 
     //availability,specialization data from view
     public List<SpecializationView> specialization;
+    //selected availabilities
     public List<AvailabilityView> availability;
 
     public List<SpecializationView> getSpecialization() {
@@ -125,8 +126,9 @@ public class DoctorViewModel extends PatientViewModel {
                 this.specialization.stream().map(specializationView -> new Specialization(specializationView.getId(), specializationView.getType())).collect(Collectors.toList()));
         doctorService.addDoctor(doctor);
         boolean validHour = true;
-        //this.doctor.availability - from view
-        for (AvailabilityView avView : this.doctor.availability) {
+        //this.availability - from view,get selected Availabilities
+
+        for (AvailabilityView avView : this.availability) {
             if (LocalTime.parse(avView.getEnd()).isBefore(LocalTime.of(19, 01)) && LocalTime.parse(avView.getStart()).isAfter(LocalTime.of(7, 59))) {
                 Availability availability = new Availability(avView.getDay(), LocalTime.parse(avView.getStart()), LocalTime.parse(avView.getEnd()), doctor);
                 doctorService.addAvailability(availability);
