@@ -53,10 +53,10 @@ public class MyAppointmentsView extends BookAppointmentViewModel {
             //this is for the allApointments.zul
             //this is for the allAppointments.zul
             //
-            this.allAppointments= appointmentService.getAllAppointments().stream().filter(appointment1 -> appointment1.getDoctor().getId().equals(user.getId())).map(this::convertAppointmentToView).collect(Collectors.toList());
+            this.allAppointments= appointmentService.getAllAppointments().stream().filter(appointment1 -> appointment1.getDoctor().getId().equals(user.getId())).map(Conversions::convertAppointmentToView).collect(Collectors.toList());
         }
         else {
-            this.allAppointments = appointmentService.getAllAppointments().stream().map(this::convertAppointmentToView).collect(Collectors.toList());
+            this.allAppointments = appointmentService.getAllAppointments().stream().map(Conversions::convertAppointmentToView).collect(Collectors.toList());
         }
         //this is for the book-appointment.zul
 

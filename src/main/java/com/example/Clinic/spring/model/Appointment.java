@@ -14,7 +14,6 @@ public class Appointment {
     private Long id;
 
 
-
     @ManyToOne
     @JoinColumn(name = "doctorID")
     private Doctor doctor;
@@ -26,30 +25,33 @@ public class Appointment {
 
 
     private Date dateOfAppointment;
-private String reason;
- /*   @OneToOne(optional = false)
-    @JoinColumn(name = "reasonID")
-    @LazyCollection(LazyCollectionOption.FALSE)
-    private Reason reason;*/
+    private String reason;
+
+    /*   @OneToOne(optional = false)
+       @JoinColumn(name = "reasonID")
+       @LazyCollection(LazyCollectionOption.FALSE)
+       private Reason reason;*/
     public Long getId() {
         return id;
     }
 
-    public void setId(Long  id) {
+    public void setId(Long id) {
         this.id = id;
     }
+
     public Appointment() {
     }
 
-    public Appointment(Doctor doctor, Patient patient, Date dateOfAppointment, String  reason) {
+    public Appointment(Doctor doctor, Patient patient, Date dateOfAppointment, String reason) {
 
         this.doctor = doctor;
         this.patient = patient;
         this.dateOfAppointment = dateOfAppointment;
         this.reason = reason;
     }
-   public Appointment(Long id,Doctor doctor, Patient patient, Date dateOfAppointment, String  reason) {
-this.id=id;
+
+    public Appointment(Long id, Doctor doctor, Patient patient, Date dateOfAppointment, String reason) {
+        this.id = id;
         this.doctor = doctor;
         this.patient = patient;
         this.dateOfAppointment = dateOfAppointment;

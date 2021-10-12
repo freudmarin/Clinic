@@ -4,6 +4,7 @@ import com.example.Clinic.spring.model.*;
 import com.example.Clinic.spring.services.AppointmentService;
 import com.example.Clinic.spring.services.DoctorService;
 import com.example.Clinic.spring.services.PatientService;
+import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @VariableResolver(DelegatingVariableResolver.class)
-public class BookAppointmentViewModel extends Conversions {
+public class BookAppointmentViewModel {
 
     List<DoctorView> allDoctors;
     List<Patient> allPatients;
@@ -31,6 +32,7 @@ public class BookAppointmentViewModel extends Conversions {
     DoctorService doctorService;
     @WireVariable
     AppointmentService appointmentService;
+
 
 
     public PatientService getPatientService() {
@@ -121,12 +123,17 @@ public class BookAppointmentViewModel extends Conversions {
     }
 
 
+    public void setPatientService(PatientService patientService) {
+        this.patientService = patientService;
+    }
+
+
     @Init(superclass = true)
     public void BookAppointmentInitSetup() {
 
 
         //this is for the book-appointment.zul
-        this.allDoctors = doctorService.getAllDoctors().stream().map(this::convertDoctorToView).collect(Collectors.toList());
+        this.allDoctors = doctorService.getAllDoctors().stream().map(Conversions::convertDoctorToView).collect(Collectors.toList());
         this.allPatients = patientService.getAllPatients();
 
     }
@@ -134,7 +141,7 @@ public class BookAppointmentViewModel extends Conversions {
     @Command
     @NotifyChange({"allDoctors"})
     public void changeFilter() {
-        this.allDoctors = doctorService.getDoctorsByVisitReason(reasonOfVisit).stream().map(this::convertDoctorToView).collect(Collectors.toList());
+        this.allDoctors = doctorService.getDoctorsByVisitReason(reasonOfVisit).stream().map(Conversions::convertDoctorToView).collect(Collectors.toList());
     }
 
     @Command //@Command declares a command method
@@ -146,7 +153,7 @@ public class BookAppointmentViewModel extends Conversions {
     @Command //@Command declares a command method
     @NotifyChange({"patientPersistence", "appointment"})
     public void selectedPatient() {
-        this.patientPersistence = patientService.findPatient(this.selectedPatient);
+        this.patientPersistence = this.getPatientService().findPatient(this.selectedPatient);
         this.appointment.patient = this.patientPersistence;
     }
 
@@ -158,10 +165,32 @@ public class BookAppointmentViewModel extends Conversions {
         {
             if(availability.getDayOfWeek().equals(DayOfWeek.parse(this.appointment.appointmentDate.getDay())
         }*/
-        Appointment appointment = new Appointment(this.appointment.getId(), this.convertViewToDoctor(this.appointment.getDoctor()), this.appointment.patient, this.appointment.appointmentDate, this.doctorService.getReason(this.reasonOfVisit).getReason());
+        Appointment appointment = new Appointment(this.appointment.getId(), Conversions.convertViewToDoctor(this.selectedDoctor), this.appointment.patient, this.appointment.appointmentDate, this.doctorService.getReason(this.reasonOfVisit).getReason());
         appointmentService.addAppointment(appointment);
         Messagebox.show("Appointment booked successfully", "Success", Messagebox.OK, Messagebox.INFORMATION);
     }
+  /*  @Command
+    @NotifyChange("showPatientPopUp")
+    public void patientPopUp() {
+        //delete the todo in the database
+
+        this.showPatientPopUp = true;
+
+        *//* HashMap<String, Object> map = new HashMap<>();
+        map.put("student", classroom.getStudents());
+        Window window = (Window) Executions.createComponents("show-students.zul", null, map);
+        window.setBorder(true);
+        window.setClosable(true);
+
+
+        window.doModal();
+        window.onClose();*//*
+    }*/
+
+
+
+
+
 
 
 }

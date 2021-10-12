@@ -75,7 +75,7 @@ public class DoctorViewModel extends Conversions {
 
     @Init
     public void initSetup() {
-        this.allDoctors = doctorService.getAllDoctors().stream().map(this::convertDoctorToView).collect(Collectors.toList());
+        this.allDoctors = doctorService.getAllDoctors().stream().map(Conversions::convertDoctorToView).collect(Collectors.toList());
         this.doctor = new DoctorView();
         this.doctor.availability = IntStream.range(1, 8).mapToObj(operand -> new AvailabilityView(DayOfWeek.of(operand), "08:00", "19:00")).collect(Collectors.toList());
         this.doctor.specializations = doctorService.getSpecialization().stream().map(specialization -> new SpecializationView(specialization.getId(), specialization.getType())).collect(Collectors.toList());

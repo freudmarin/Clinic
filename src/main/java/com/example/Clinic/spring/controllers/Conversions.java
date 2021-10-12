@@ -10,7 +10,7 @@ import java.util.Locale;
 import java.util.stream.Collectors;
 
 public class Conversions {
-    public Reason convertViewToReason(ReasonView reasonView)
+    public static Reason convertViewToReason(ReasonView reasonView)
     {
         Reason result = null;
 
@@ -19,7 +19,7 @@ public class Conversions {
         }
         return  result;
     }
-    public DoctorView convertDoctorToView(Doctor doctor) {
+    public  static DoctorView convertDoctorToView(Doctor doctor) {
         DoctorView result = null;
 
         if (doctor != null) {
@@ -34,7 +34,7 @@ public class Conversions {
         return result;
     }
 
-    public Doctor convertViewToDoctor(DoctorView doctorView) {
+    public static Doctor convertViewToDoctor(DoctorView doctorView) {
         Doctor result = null;
 
         if (doctorView != null) {
@@ -44,15 +44,12 @@ public class Conversions {
 
         return result;
     }
-    public AppointmentView convertAppointmentToView(Appointment appointment) {
+    public static AppointmentView convertAppointmentToView(Appointment appointment) {
         AppointmentView result = null;
         //  SimpleDateFormat formatter=new SimpleDateFormat("dd/MM/yyyy");
         if (appointment != null) {
             result = new AppointmentView(appointment.getId(), appointment.getDateOfAppointment(), convertDoctorToView(appointment.getDoctor()), appointment.getPatient(), appointment.getReason());
-
         }
         return result;
     }
-
-
 }

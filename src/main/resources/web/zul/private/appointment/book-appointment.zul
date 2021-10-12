@@ -1,7 +1,7 @@
 <zk>
-    <include src="~./zul/template.zul"/>
 
-    <include templateURI="~./zul/template.zul"/>
+
+    <include src="~./zul/template.zul"/>
 
 
     <div width="100%" height="60%"

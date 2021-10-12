@@ -1,8 +1,11 @@
+
 <zk>
 
+
     <zk if="${sessionScope.userLoggedIn !=null}">
-        <menubar id="menubar" autodrop="true">
-            <menu label="Patients">
+        <menubar sclass="menubar" autodrop="true">
+
+            <menu label="Patients"  sclass="menu">
                 <menupopup>
                     <menuitem label="All Patients" href="~./zul/private/patient/all-patients.zul"/>
                     <zk if="${sessionScope.userLoggedIn.role=='secretary'}">
@@ -11,7 +14,7 @@
                     </zk>
                 </menupopup>
             </menu>
-            <menu label="Doctor">
+            <menu label="Doctor"  sclass="menu">
                 <menupopup>
 
 
@@ -22,9 +25,9 @@
                 </menupopup>
             </menu>
 
-            <menu label="Appointments">
+            <menu label="Appointments" sclass="menu">
 
-                <menupopup>
+                <menupopup >
                     <zk if="${sessionScope.userLoggedIn.role=='superuser'}">
 
                         <menuitem label="All Appointments"  href="~./zul/private/appointment/all-appointments.zul"/>
@@ -47,5 +50,6 @@
 
         </menubar>
     </zk>
+
 </zk>
 

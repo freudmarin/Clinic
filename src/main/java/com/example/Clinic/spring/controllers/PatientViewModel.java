@@ -15,7 +15,7 @@ import java.util.Date;
 import java.util.List;
 
 @VariableResolver(DelegatingVariableResolver.class)
-public class PatientViewModel extends ReasonView {
+public class PatientViewModel {
 
     private String patientID;
     private String name;
@@ -23,8 +23,7 @@ public class PatientViewModel extends ReasonView {
     public PatientService getPatientService() {
         return patientService;
     }
-
-    @WireVariable
+@WireVariable
     PatientService patientService;
     public String getPatientID() {
         return patientID;
@@ -55,7 +54,6 @@ public class PatientViewModel extends ReasonView {
     public List<Patient> getPatientsList() {
         return patientsList;
     }
-
     public PatientViewModel(String patientID, String name, Date dateOfBirth) {
         this.patientID = patientID;
         this.name = name;

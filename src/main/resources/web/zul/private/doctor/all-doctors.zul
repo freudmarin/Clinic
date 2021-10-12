@@ -1,7 +1,7 @@
 <zk>
     <include src="~./zul/template.zul"/>
 
-    <include templateURI="~./zul/template.zul"/>
+
     <window apply="org.zkoss.bind.BindComposer"
             border="normal" hflex="1" vflex="1" contentStyle="overflow:auto"
             viewModel="@id('vm') @init('com.example.Clinic.spring.controllers.DoctorViewModel')">
