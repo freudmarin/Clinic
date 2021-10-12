@@ -2,22 +2,14 @@ package com.example.Clinic.spring.controllers;
 
 import com.example.Clinic.spring.model.Availability;
 import com.example.Clinic.spring.model.Doctor;
-import com.example.Clinic.spring.model.Patient;
 import com.example.Clinic.spring.model.Specialization;
 import com.example.Clinic.spring.services.DoctorService;
-import com.example.Clinic.spring.services.PatientService;
-import org.hibernate.Hibernate;
-import org.hibernate.SessionFactory;
-import org.hibernate.type.LocalTimeType;
-import org.springframework.util.ObjectUtils;
-import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
-import org.zkoss.zul.A;
 import org.zkoss.zul.Messagebox;
 
 import java.time.DayOfWeek;
@@ -28,7 +20,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @VariableResolver(DelegatingVariableResolver.class)
-public class DoctorViewModel extends PatientViewModel {
+public class DoctorViewModel extends Conversions {
     @WireVariable
     DoctorService doctorService;
 

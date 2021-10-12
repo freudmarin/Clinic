@@ -74,7 +74,7 @@ return  this.appointmentDate.toString();
 
     public String  getDoctorName()
     {
-        return this.doctor.name;
+        return this.doctor.getName();
     }
 
 

@@ -70,27 +70,7 @@ public class PatientViewModel extends ReasonView {
     public PatientViewModel() {
 
     }
-    private PatientViewModel convertToPatientView(Patient patient) {
-        PatientViewModel result = null;
 
-        if (patient != null) {
-
-            result = new PatientViewModel(patient.getPatientID(), patient.getName(), patient.getDateOfBirth());
-        }
-        return result;
-
-    }
-
-    public Patient convertViewToPatient(PatientViewModel patient) {
-        Patient result = null;
-
-        if (patient != null) {
-
-            result = new Patient(patient.getPatientID(), patient.getName(), patient.getDateOfBirth());
-        }
-        return result;
-
-    }
 
     @Command
     @NotifyChange()

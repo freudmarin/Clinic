@@ -35,6 +35,7 @@
                     </zk>
                     <zk if="${sessionScope.userLoggedIn.role=='secretary'}">
                         <menuitem label="Book Appointment" href="~./zul/private/appointment/book-appointment.zul" />
+                        <menuitem label="All Appointments"  href="~./zul/private/appointment/all-appointments.zul"/>
                     </zk>
                 </menupopup>
             </menu>

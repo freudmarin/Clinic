@@ -35,13 +35,5 @@ public class ReasonView {
     public ReasonView() {
     }
 
-    public Reason convertViewToReason(ReasonView reasonView)
-    {
-        Reason result = null;
 
-        if (reasonView != null) {
-            result  = new Reason(reasonView.getId(), reasonView.getType());
-        }
-        return  result;
-    }
 }

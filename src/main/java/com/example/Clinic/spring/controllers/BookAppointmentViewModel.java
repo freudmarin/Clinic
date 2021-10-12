@@ -2,7 +2,6 @@ package com.example.Clinic.spring.controllers;
 
 import com.example.Clinic.spring.model.*;
 import com.example.Clinic.spring.services.AppointmentService;
-import com.example.Clinic.spring.services.AuthenticationService;
 import com.example.Clinic.spring.services.DoctorService;
 import com.example.Clinic.spring.services.PatientService;
 import org.zkoss.bind.annotation.Command;
@@ -11,23 +10,12 @@ import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
-import org.zkoss.zul.A;
-import org.zkoss.zul.ListModel;
-import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Messagebox;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.DayOfWeek;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatterBuilder;
 import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @VariableResolver(DelegatingVariableResolver.class)
-public class BookAppointmentViewModel extends DoctorViewModel {
+public class BookAppointmentViewModel extends Conversions {
 
     List<DoctorView> allDoctors;
     List<Patient> allPatients;
@@ -43,7 +31,6 @@ public class BookAppointmentViewModel extends DoctorViewModel {
     DoctorService doctorService;
     @WireVariable
     AppointmentService appointmentService;
-
 
 
     public PatientService getPatientService() {
@@ -74,7 +61,6 @@ public class BookAppointmentViewModel extends DoctorViewModel {
 
     public BookAppointmentViewModel() {
     }
-
 
 
     public DoctorView getSelectedDoctor() {
@@ -135,21 +121,20 @@ public class BookAppointmentViewModel extends DoctorViewModel {
     }
 
 
-
-
     @Init(superclass = true)
     public void BookAppointmentInitSetup() {
 
 
-            //this is for the book-appointment.zul
-            this.allDoctors = super.doctorService.getAllDoctors().stream().map(this::convertDoctorToView).collect(Collectors.toList());
-            this.allPatients = patientService.getAllPatients();
+        //this is for the book-appointment.zul
+        this.allDoctors = doctorService.getAllDoctors().stream().map(this::convertDoctorToView).collect(Collectors.toList());
+        this.allPatients = patientService.getAllPatients();
 
     }
+
     @Command
     @NotifyChange({"allDoctors"})
     public void changeFilter() {
-        this.allDoctors = super.doctorService.getDoctorsByVisitReason(reasonOfVisit).stream().map(this::convertDoctorToView).collect(Collectors.toList());
+        this.allDoctors = doctorService.getDoctorsByVisitReason(reasonOfVisit).stream().map(this::convertDoctorToView).collect(Collectors.toList());
     }
 
     @Command //@Command declares a command method
@@ -173,19 +158,10 @@ public class BookAppointmentViewModel extends DoctorViewModel {
         {
             if(availability.getDayOfWeek().equals(DayOfWeek.parse(this.appointment.appointmentDate.getDay())
         }*/
-        Appointment appointment = new Appointment(this.appointment.getId(), this.convertViewToDoctor(this.appointment.doctor), this.appointment.patient, this.appointment.appointmentDate, this.doctorService.getReason(this.reasonOfVisit).getReason());
+        Appointment appointment = new Appointment(this.appointment.getId(), this.convertViewToDoctor(this.appointment.getDoctor()), this.appointment.patient, this.appointment.appointmentDate, this.doctorService.getReason(this.reasonOfVisit).getReason());
         appointmentService.addAppointment(appointment);
         Messagebox.show("Appointment booked successfully", "Success", Messagebox.OK, Messagebox.INFORMATION);
     }
 
-    public AppointmentView convertAppointmentToView(Appointment appointment) {
-        AppointmentView result = null;
-        //  SimpleDateFormat formatter=new SimpleDateFormat("dd/MM/yyyy");
-        if (appointment != null) {
-            result = new AppointmentView(appointment.getId(), appointment.getDateOfAppointment(), convertDoctorToView(appointment.getDoctor()), appointment.getPatient(), appointment.getReason());
-
-        }
-        return result;
-    }
 
 }
