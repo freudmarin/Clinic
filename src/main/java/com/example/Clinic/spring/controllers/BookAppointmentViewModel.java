@@ -42,11 +42,12 @@ public class BookAppointmentViewModel {
     DoctorService doctorService;
     @WireVariable
     AppointmentService appointmentService;
-List<String> appointmentTimes = new ArrayList<>();
-//converted date for persistence
-Date dayOfAppointment =new Date();
-//selected string from the view
-  public   String selectedTimeOfAppointment;
+    List<String> appointmentTimes = new ArrayList<>();
+    //converted date for persistence
+    Date dayOfAppointment = new Date();
+    //selected string from the view
+    public String selectedTimeOfAppointment;
+
     public PatientService getPatientService() {
         return patientService;
     }
@@ -185,16 +186,13 @@ Date dayOfAppointment =new Date();
     }
 
     @Command //@Command declares a command method
-    @NotifyChange({"appointment","appointmentTimes"})
+    @NotifyChange({"appointment", "appointmentTimes"})
     public void selectedDoctor() {
         this.appointment.doctor = this.selectedDoctor;
-        this.appointmentTimes=appointmentTime();
-
+        this.appointmentTimes = appointmentTime();
 
 
     }
-
-
 
 
     @Command //@Command declares a command method
@@ -204,9 +202,9 @@ Date dayOfAppointment =new Date();
         this.appointment.appointmentDate = convertSelectedTimeDate(selectedTimeOfAppointment);
 
 
-
         //convert  the List<Availability> to List<AvailabilityView> after you process the data fetched from database
     }
+
     @Command //@Command declares a command method
     @NotifyChange({"patientPersistence", "appointment"})
     public void selectedPatient() {
@@ -222,12 +220,16 @@ Date dayOfAppointment =new Date();
         {
             if(availability.getDayOfWeek().equals(DayOfWeek.parse(this.appointment.appointmentDate.getDay())
         }*/
+        if (this.appointment.appointmentDate == null) {
+            Messagebox.show("Appointment could not be booked,because the day selected is before today", "Error", Messagebox.OK, Messagebox.ERROR);
+        } else {
+            Appointment appointment = new Appointment(this.appointment.getId(), convertViewToDoctor(this.selectedDoctor), this.appointment.patient, this.appointment.appointmentDate, this.doctorService.getReason(this.reasonOfVisit).getReason());
+            appointmentService.addAppointment(appointment);
+            Messagebox.show("Appointment booked successfully", "Success", Messagebox.OK, Messagebox.INFORMATION);
+        }
 
-        Appointment appointment = new Appointment(this.appointment.getId(), convertViewToDoctor(this.selectedDoctor), this.appointment.patient, this.appointment.appointmentDate, this.doctorService.getReason(this.reasonOfVisit).getReason());
-        appointmentService.addAppointment(appointment);
-        Messagebox.show("Appointment booked successfully", "Success", Messagebox.OK, Messagebox.INFORMATION);
+
     }
-
     public List<String> appointmentTime() {
         //Once the doctor is selected we can fetch the list of availabilities for that particular doctor
         List<Availability> doctorAvailabilities = doctorService.getAvailabilityByDoctor(Conversions.convertViewToDoctor(this.appointment.doctor));
@@ -235,19 +237,19 @@ Date dayOfAppointment =new Date();
 
 
         for (Availability availability : doctorAvailabilities) {
-            String  dayOfWeek = availability.getDayOfWeek().toString();
+            String dayOfWeek = availability.getDayOfWeek().toString();
 
 
-         String firstLetter  =  dayOfWeek.substring(0,1);
-         String otherLetters =dayOfWeek.substring(1).toLowerCase();
+            String firstLetter = dayOfWeek.substring(0, 1);
+            String otherLetters = dayOfWeek.substring(1).toLowerCase();
             LocalTime start = availability.getBeginTime();
             LocalTime end = availability.getEndTime();
-            allAppointmentTimes.add(firstLetter+otherLetters +" "+ start.toString());
+            allAppointmentTimes.add(firstLetter + otherLetters + " " + start.toString());
             while (start.isBefore(end)) {
                 start = start.plusMinutes(30);
-                allAppointmentTimes.add(firstLetter+otherLetters+" "+ start.toString());
+                allAppointmentTimes.add(firstLetter + otherLetters + " " + start.toString());
             }
-allAppointmentTimes.remove(allAppointmentTimes.size()-1);
+            allAppointmentTimes.remove(allAppointmentTimes.size() - 1);
         }
         return allAppointmentTimes;
     }
@@ -257,10 +259,10 @@ allAppointmentTimes.remove(allAppointmentTimes.size()-1);
 
         String[] arrStringOfSelectedDate = selectedTimeOfAppointment.split(" ");
         String dayOfWeekSelected = arrStringOfSelectedDate[0].toUpperCase();
-        String hourSelected =arrStringOfSelectedDate[1];
-        String[] hourAndMinutes= hourSelected.split(":");
-        int hour =Integer.parseInt(hourAndMinutes[0]);
-        int minutes=Integer.parseInt(hourAndMinutes[1]);
+        String hourSelected = arrStringOfSelectedDate[1];
+        String[] hourAndMinutes = hourSelected.split(":");
+        int hour = Integer.parseInt(hourAndMinutes[0]);
+        int minutes = Integer.parseInt(hourAndMinutes[1]);
 
 
         //the selected one
@@ -268,7 +270,7 @@ allAppointmentTimes.remove(allAppointmentTimes.size()-1);
 
 
         LocalDate today = LocalDate.now();
-        LocalDate choosenDate=today;
+        LocalDate choosenDate = today;
         //so  if today's index is greater than the selected it means you can't choose that selected
         if (today.getDayOfWeek().getValue() > dayOfWeek) {
             return null;
@@ -276,21 +278,21 @@ allAppointmentTimes.remove(allAppointmentTimes.size()-1);
             DayOfWeek dayOfThisWeek = DayOfWeek.of(dayOfWeek);
 
 
-            while(choosenDate.getDayOfWeek()!=dayOfThisWeek)
-            {
-choosenDate=choosenDate.plusDays(1);
+            while (choosenDate.getDayOfWeek() != dayOfThisWeek) {
+                choosenDate = choosenDate.plusDays(1);
             }
             Date choosenDateInDateFormat = convertToDate(choosenDate);
+            choosenDateInDateFormat.setHours(hour);
+            choosenDateInDateFormat.setMinutes(minutes);
 
-       //     choosenDateInDateFormat.setTime(hour+minutes);
-return choosenDateInDateFormat;
-
-
+            //     choosenDateInDateFormat.setTime(hour+minutes);
+            return choosenDateInDateFormat;
 
 
         }
     }
-    public   Date convertToDate(LocalDate dateToConvert) {
+
+    public Date convertToDate(LocalDate dateToConvert) {
         return java.util.Date.from(dateToConvert.atStartOfDay()
                 .atZone(ZoneId.systemDefault())
                 .toInstant());
