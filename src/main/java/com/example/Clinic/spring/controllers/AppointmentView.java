@@ -5,6 +5,8 @@ import com.example.Clinic.spring.model.Patient;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class AppointmentView {

@@ -1,9 +1,6 @@
 package com.example.Clinic.spring.controllers;
 
-import com.example.Clinic.spring.model.Appointment;
-import com.example.Clinic.spring.model.Doctor;
-import com.example.Clinic.spring.model.Reason;
-import com.example.Clinic.spring.model.Specialization;
+import com.example.Clinic.spring.model.*;
 
 import java.time.format.DateTimeFormatterBuilder;
 import java.util.Locale;
@@ -49,6 +46,15 @@ public class Conversions {
         //  SimpleDateFormat formatter=new SimpleDateFormat("dd/MM/yyyy");
         if (appointment != null) {
             result = new AppointmentView(appointment.getId(), appointment.getDateOfAppointment(), convertDoctorToView(appointment.getDoctor()), appointment.getPatient(), appointment.getReason());
+        }
+        return result;
+    }
+    public static  AvailabilityView convertAvailabilityToView(Availability availability)
+    {
+        AvailabilityView result = null;
+        //  SimpleDateFormat formatter=new SimpleDateFormat("dd/MM/yyyy");
+        if (availability!= null) {
+            result = new AvailabilityView(availability.getDayOfWeek(), availability.getBeginTime().toString(),availability.getEndTime().toString());
         }
         return result;
     }

@@ -8,16 +8,26 @@ import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.text.DateFormats;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 import org.zkoss.zul.Messagebox;
-import java.util.List;
+
+import javax.persistence.Convert;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.example.Clinic.spring.controllers.Conversions.convertViewToDoctor;
 
 @VariableResolver(DelegatingVariableResolver.class)
 public class BookAppointmentViewModel {
-
     List<DoctorView> allDoctors;
     List<Patient> allPatients;
     AppointmentView appointment = new AppointmentView();
@@ -32,9 +42,11 @@ public class BookAppointmentViewModel {
     DoctorService doctorService;
     @WireVariable
     AppointmentService appointmentService;
-
-
-
+List<String> appointmentTimes = new ArrayList<>();
+//converted date for persistence
+Date dayOfAppointment =new Date();
+//selected string from the view
+  public   String selectedTimeOfAppointment;
     public PatientService getPatientService() {
         return patientService;
     }
@@ -60,6 +72,7 @@ public class BookAppointmentViewModel {
     public void setAllPatients(List<Patient> allPatients) {
         this.allPatients = allPatients;
     }
+
 
     public BookAppointmentViewModel() {
     }
@@ -127,6 +140,33 @@ public class BookAppointmentViewModel {
         this.patientService = patientService;
     }
 
+    public List<String> getAppointmentTimes() {
+        return appointmentTimes;
+    }
+
+    public void setAppointmentTimes(List<String> appointmentTimes) {
+        this.appointmentTimes = appointmentTimes;
+    }
+
+    public void setAllDoctors(List<DoctorView> allDoctors) {
+        this.allDoctors = allDoctors;
+    }
+/*
+    public Date getDayOfAppointment() {
+        return dayOfAppointment;
+    }
+
+    public void setDayOfAppointment(Date dayOfAppointment) {
+        this.dayOfAppointment = dayOfAppointment;
+    }*/
+
+    public String getSelectedTimeOfAppointment() {
+        return selectedTimeOfAppointment;
+    }
+
+    public void setSelectedTimeOfAppointment(String selectedTimeOfAppointment) {
+        this.selectedTimeOfAppointment = selectedTimeOfAppointment;
+    }
 
     @Init(superclass = true)
     public void BookAppointmentInitSetup() {
@@ -145,11 +185,28 @@ public class BookAppointmentViewModel {
     }
 
     @Command //@Command declares a command method
-    @NotifyChange({"appointment"})
+    @NotifyChange({"appointment","appointmentTimes"})
     public void selectedDoctor() {
         this.appointment.doctor = this.selectedDoctor;
+        this.appointmentTimes=appointmentTime();
+
+
+
     }
 
+
+
+
+    @Command //@Command declares a command method
+    @NotifyChange({"appointment"})
+    public void selectedDateOfAppointment() {
+        //dayOfAppointment is variable for selected date
+        this.appointment.appointmentDate = convertSelectedTimeDate(selectedTimeOfAppointment);
+
+
+
+        //convert  the List<Availability> to List<AvailabilityView> after you process the data fetched from database
+    }
     @Command //@Command declares a command method
     @NotifyChange({"patientPersistence", "appointment"})
     public void selectedPatient() {
@@ -165,32 +222,87 @@ public class BookAppointmentViewModel {
         {
             if(availability.getDayOfWeek().equals(DayOfWeek.parse(this.appointment.appointmentDate.getDay())
         }*/
-        Appointment appointment = new Appointment(this.appointment.getId(), Conversions.convertViewToDoctor(this.selectedDoctor), this.appointment.patient, this.appointment.appointmentDate, this.doctorService.getReason(this.reasonOfVisit).getReason());
+
+        Appointment appointment = new Appointment(this.appointment.getId(), convertViewToDoctor(this.selectedDoctor), this.appointment.patient, this.appointment.appointmentDate, this.doctorService.getReason(this.reasonOfVisit).getReason());
         appointmentService.addAppointment(appointment);
         Messagebox.show("Appointment booked successfully", "Success", Messagebox.OK, Messagebox.INFORMATION);
     }
-  /*  @Command
-    @NotifyChange("showPatientPopUp")
-    public void patientPopUp() {
-        //delete the todo in the database
 
-        this.showPatientPopUp = true;
-
-        *//* HashMap<String, Object> map = new HashMap<>();
-        map.put("student", classroom.getStudents());
-        Window window = (Window) Executions.createComponents("show-students.zul", null, map);
-        window.setBorder(true);
-        window.setClosable(true);
+    public List<String> appointmentTime() {
+        //Once the doctor is selected we can fetch the list of availabilities for that particular doctor
+        List<Availability> doctorAvailabilities = doctorService.getAvailabilityByDoctor(Conversions.convertViewToDoctor(this.appointment.doctor));
+        List<String> allAppointmentTimes = new ArrayList<>();
 
 
-        window.doModal();
-        window.onClose();*//*
+        for (Availability availability : doctorAvailabilities) {
+            String  dayOfWeek = availability.getDayOfWeek().toString();
+
+
+         String firstLetter  =  dayOfWeek.substring(0,1);
+         String otherLetters =dayOfWeek.substring(1).toLowerCase();
+            LocalTime start = availability.getBeginTime();
+            LocalTime end = availability.getEndTime();
+            allAppointmentTimes.add(firstLetter+otherLetters +" "+ start.toString());
+            while (start.isBefore(end)) {
+                start = start.plusMinutes(30);
+                allAppointmentTimes.add(firstLetter+otherLetters+" "+ start.toString());
+            }
+allAppointmentTimes.remove(allAppointmentTimes.size()-1);
+        }
+        return allAppointmentTimes;
+    }
+
+    public Date convertSelectedTimeDate(String selectedTimeOfAppointment) {
+
+
+        String[] arrStringOfSelectedDate = selectedTimeOfAppointment.split(" ");
+        String dayOfWeekSelected = arrStringOfSelectedDate[0].toUpperCase();
+        String hourSelected =arrStringOfSelectedDate[1];
+        String[] hourAndMinutes= hourSelected.split(":");
+        int hour =Integer.parseInt(hourAndMinutes[0]);
+        int minutes=Integer.parseInt(hourAndMinutes[1]);
+
+
+        //the selected one
+        int dayOfWeek = DayOfWeek.valueOf(dayOfWeekSelected).getValue();//parseDayOfWeek(dayOfWeekSelected);
+
+
+        LocalDate today = LocalDate.now();
+        LocalDate choosenDate=today;
+        //so  if today's index is greater than the selected it means you can't choose that selected
+        if (today.getDayOfWeek().getValue() > dayOfWeek) {
+            return null;
+        } else {
+            DayOfWeek dayOfThisWeek = DayOfWeek.of(dayOfWeek);
+
+
+            while(choosenDate.getDayOfWeek()!=dayOfThisWeek)
+            {
+choosenDate=choosenDate.plusDays(1);
+            }
+            Date choosenDateInDateFormat = convertToDate(choosenDate);
+
+       //     choosenDateInDateFormat.setTime(hour+minutes);
+return choosenDateInDateFormat;
+
+
+
+
+        }
+    }
+    public   Date convertToDate(LocalDate dateToConvert) {
+        return java.util.Date.from(dateToConvert.atStartOfDay()
+                .atZone(ZoneId.systemDefault())
+                .toInstant());
+    }
+/*    public   int parseDayOfWeek(String day)
+    {
+        SimpleDateFormat dayFormat = new SimpleDateFormat("DD:HH:mm");
+        Date date = dayFormat.day);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+        return dayOfWeek;
     }*/
-
-
-
-
-
-
-
 }
+
