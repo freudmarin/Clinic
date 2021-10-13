@@ -15,7 +15,8 @@ public class AppointmentView {
     DoctorView doctor;
     Patient patient;
     String reason;
-    public AppointmentView(Long  id,Date appointmentDate, DoctorView doctor, Patient patient, String  reason) {
+
+    public AppointmentView(Long id, Date appointmentDate, DoctorView doctor, Patient patient, String reason) {
         this.id = id;
         this.appointmentDate = appointmentDate;
         this.doctor = doctor;
@@ -28,10 +29,9 @@ public class AppointmentView {
     }
 
 
-
     public String ConvertDateToString() {
 
-return  this.appointmentDate.toString();
+        return this.appointmentDate.toString();
     }
 
     public Long getId() {
@@ -74,14 +74,12 @@ return  this.appointmentDate.toString();
         this.reason = reason;
     }
 
-    public String  getDoctorName()
-    {
+    public String getDoctorName() {
         return this.doctor.getName();
     }
 
 
-    public String  getPatientName()
-    {
+    public String getPatientName() {
         return this.patient.getName();
     }
 }

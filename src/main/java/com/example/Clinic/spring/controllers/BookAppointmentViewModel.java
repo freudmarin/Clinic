@@ -47,179 +47,119 @@ public class BookAppointmentViewModel {
     Date dayOfAppointment = new Date();
     //selected string from the view
     public String selectedTimeOfAppointment;
-
     public PatientService getPatientService() {
         return patientService;
     }
-
     public String reasonOfVisit;
-
     public String getReasonOfVisit() {
         return reasonOfVisit;
     }
-
     public void setReasonOfVisit(String reasonOfVisit) {
         this.reasonOfVisit = reasonOfVisit;
     }
-
     public List<DoctorView> getAllDoctors() {
         return allDoctors;
     }
-
     public List<Patient> getAllPatients() {
         return allPatients;
     }
-
     public void setAllPatients(List<Patient> allPatients) {
         this.allPatients = allPatients;
     }
-
-
     public BookAppointmentViewModel() {
     }
-
-
     public DoctorView getSelectedDoctor() {
         return selectedDoctor;
     }
-
     public void setSelectedDoctor(DoctorView selectedDoctor) {
         this.selectedDoctor = selectedDoctor;
     }
-
-
     public AppointmentView getAppointment() {
         return appointment;
     }
-
     public void setAppointment(AppointmentView appointment) {
         this.appointment = appointment;
     }
-
     public Patient getPatientPersistence() {
         return patientPersistence;
     }
-
     public void setPatientPersistence(Patient patientPersistence) {
         this.patientPersistence = patientPersistence;
     }
-
     public ReasonView getReason() {
         return reason;
     }
-
     public void setReason(ReasonView reason) {
         this.reason = reason;
     }
-
     public DoctorService getDoctorService() {
         return doctorService;
     }
-
     public void setDoctorService(DoctorService doctorService) {
         this.doctorService = doctorService;
     }
-
     public AppointmentService getAppointmentService() {
         return appointmentService;
     }
-
     public void setAppointmentService(AppointmentService appointmentService) {
         this.appointmentService = appointmentService;
     }
-
     public Patient getSelectedPatient() {
         return selectedPatient;
     }
-
     public void setSelectedPatient(Patient selectedPatient) {
         this.selectedPatient = selectedPatient;
     }
-
-
     public void setPatientService(PatientService patientService) {
         this.patientService = patientService;
     }
-
     public List<String> getAppointmentTimes() {
         return appointmentTimes;
     }
-
     public void setAppointmentTimes(List<String> appointmentTimes) {
         this.appointmentTimes = appointmentTimes;
     }
-
     public void setAllDoctors(List<DoctorView> allDoctors) {
         this.allDoctors = allDoctors;
     }
-/*
-    public Date getDayOfAppointment() {
-        return dayOfAppointment;
-    }
-
-    public void setDayOfAppointment(Date dayOfAppointment) {
-        this.dayOfAppointment = dayOfAppointment;
-    }*/
-
     public String getSelectedTimeOfAppointment() {
         return selectedTimeOfAppointment;
     }
-
     public void setSelectedTimeOfAppointment(String selectedTimeOfAppointment) {
         this.selectedTimeOfAppointment = selectedTimeOfAppointment;
     }
-
     @Init(superclass = true)
     public void BookAppointmentInitSetup() {
-
-
         //this is for the book-appointment.zul
         this.allDoctors = doctorService.getAllDoctors().stream().map(Conversions::convertDoctorToView).collect(Collectors.toList());
         this.allPatients = patientService.getAllPatients();
-
     }
-
     @Command
     @NotifyChange({"allDoctors"})
     public void changeFilter() {
         this.allDoctors = doctorService.getDoctorsByVisitReason(reasonOfVisit).stream().map(Conversions::convertDoctorToView).collect(Collectors.toList());
     }
-
     @Command //@Command declares a command method
     @NotifyChange({"appointment", "appointmentTimes"})
     public void selectedDoctor() {
         this.appointment.doctor = this.selectedDoctor;
         this.appointmentTimes = appointmentTime();
-
-
     }
-
-
     @Command //@Command declares a command method
     @NotifyChange({"appointment"})
     public void selectedDateOfAppointment() {
         //dayOfAppointment is variable for selected date
         this.appointment.appointmentDate = convertSelectedTimeDate(selectedTimeOfAppointment);
-
-
-        //convert  the List<Availability> to List<AvailabilityView> after you process the data fetched from database
     }
-
     @Command //@Command declares a command method
     @NotifyChange({"patientPersistence", "appointment"})
     public void selectedPatient() {
         this.patientPersistence = this.getPatientService().findPatient(this.selectedPatient);
         this.appointment.patient = this.patientPersistence;
     }
-
     @Command
     @NotifyChange()
     public void addAppointment() {
-      /*  List<Availability> doctorAvailabilitiesFromDb= doctorService.getAvailabilityByDoctor(this.convertViewToDoctor(this.appointment.doctor));
-        for(Availability availability:doctorAvailabilitiesFromDb)
-        {
-            if(availability.getDayOfWeek().equals(DayOfWeek.parse(this.appointment.appointmentDate.getDay())
-        }*/
         if (this.appointment.appointmentDate == null) {
             Messagebox.show("Appointment could not be booked,because the day selected is before today", "Error", Messagebox.OK, Messagebox.ERROR);
         } else {
@@ -227,19 +167,13 @@ public class BookAppointmentViewModel {
             appointmentService.addAppointment(appointment);
             Messagebox.show("Appointment booked successfully", "Success", Messagebox.OK, Messagebox.INFORMATION);
         }
-
-
     }
     public List<String> appointmentTime() {
         //Once the doctor is selected we can fetch the list of availabilities for that particular doctor
         List<Availability> doctorAvailabilities = doctorService.getAvailabilityByDoctor(Conversions.convertViewToDoctor(this.appointment.doctor));
         List<String> allAppointmentTimes = new ArrayList<>();
-
-
         for (Availability availability : doctorAvailabilities) {
             String dayOfWeek = availability.getDayOfWeek().toString();
-
-
             String firstLetter = dayOfWeek.substring(0, 1);
             String otherLetters = dayOfWeek.substring(1).toLowerCase();
             LocalTime start = availability.getBeginTime();
@@ -255,20 +189,14 @@ public class BookAppointmentViewModel {
     }
 
     public Date convertSelectedTimeDate(String selectedTimeOfAppointment) {
-
-
         String[] arrStringOfSelectedDate = selectedTimeOfAppointment.split(" ");
         String dayOfWeekSelected = arrStringOfSelectedDate[0].toUpperCase();
         String hourSelected = arrStringOfSelectedDate[1];
         String[] hourAndMinutes = hourSelected.split(":");
         int hour = Integer.parseInt(hourAndMinutes[0]);
         int minutes = Integer.parseInt(hourAndMinutes[1]);
-
-
         //the selected one
         int dayOfWeek = DayOfWeek.valueOf(dayOfWeekSelected).getValue();//parseDayOfWeek(dayOfWeekSelected);
-
-
         LocalDate today = LocalDate.now();
         LocalDate choosenDate = today;
         //so  if today's index is greater than the selected it means you can't choose that selected
@@ -276,19 +204,14 @@ public class BookAppointmentViewModel {
             return null;
         } else {
             DayOfWeek dayOfThisWeek = DayOfWeek.of(dayOfWeek);
-
-
             while (choosenDate.getDayOfWeek() != dayOfThisWeek) {
                 choosenDate = choosenDate.plusDays(1);
             }
             Date choosenDateInDateFormat = convertToDate(choosenDate);
             choosenDateInDateFormat.setHours(hour);
             choosenDateInDateFormat.setMinutes(minutes);
-
             //     choosenDateInDateFormat.setTime(hour+minutes);
             return choosenDateInDateFormat;
-
-
         }
     }
 
@@ -297,14 +220,5 @@ public class BookAppointmentViewModel {
                 .atZone(ZoneId.systemDefault())
                 .toInstant());
     }
-/*    public   int parseDayOfWeek(String day)
-    {
-        SimpleDateFormat dayFormat = new SimpleDateFormat("DD:HH:mm");
-        Date date = dayFormat.day);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-        return dayOfWeek;
-    }*/
 }
 

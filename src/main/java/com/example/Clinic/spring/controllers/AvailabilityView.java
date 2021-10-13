@@ -12,9 +12,6 @@ public class AvailabilityView {
     String end;
 
     //   private final SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-
-
-
     public AvailabilityView(DayOfWeek day, String start, String end) {
 
         this.day = day;
