@@ -207,6 +207,14 @@ public class BookAppointmentViewModel {
 
         List<Appointment> bookedAppointments = appointmentService.getAllAppointments();
         List<String> allAppointmentTimes = new ArrayList<>();
+//Building of UI functionality
+
+
+
+        allAppointmentTimes = doctorAvailabilities.stream()
+                .flatMap(availability -> this.filterAppointments(availability, bookedAppointments))
+                .collect(Collectors.toList());
+
 
         for (Availability availability : doctorAvailabilities) {
 
@@ -227,6 +235,7 @@ public class BookAppointmentViewModel {
             }
         }
         allAppointmentTimes.remove(allAppointmentTimes.size() - 1);
+        //If doctor is at another appointment ,don't show that time at combobox
         for (Availability availability : doctorAvailabilities) {
             for (Appointment appointment : bookedAppointments) {
                 Date dateOfAppointment = appointment.getDateOfAppointment();
@@ -245,9 +254,9 @@ public class BookAppointmentViewModel {
                 String availableWeekDayFormatted = firstLetter + otherLetters;
 
                 while (startOfAppointment.isBefore(endOfAppointment)) {
-                    if (weekDayFromDb.equals(availableWeekDayFormatted) && dateOfAppointment.getMinutes() == startOfAppointment.getMinute() && dateOfAppointment.getHours() == startOfAppointment.getHour()  /*appointment.getDoctor().getId() == Conversions.convertViewToDoctor(this.appointment.doctor).getId()*/)
-                    //if the doctor in appointment table is the current one (chosen in view)
-                    {  // appointment.getDoctor().getId().equals(Conversions.convertViewToDoctor(this.appointment.doctor).getId())) {
+                    if (weekDayFromDb.equalsIgnoreCase(availableWeekDayFormatted) &&
+                            dateOfAppointment.getMinutes() == startOfAppointment.getMinute() &&
+                            dateOfAppointment.getHours() == startOfAppointment.getHour()  *//*appointment.getDoctor().getId() == Conversions.convertViewToDoctor(this.appointment.doctor).getId()*//*) {  // appointment.getDoctor().getId().equals(Conversions.convertViewToDoctor(this.appointment.doctor).getId())) {
 
                         String appointmentTimeToBeRemoved = availableWeekDayFormatted + " " + dateOfAppointment.getHours() + ":" + dateOfAppointment.getMinutes();
                         if (dateOfAppointment.getMinutes() == 0)
