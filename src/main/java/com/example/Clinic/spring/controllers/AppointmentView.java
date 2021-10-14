@@ -29,10 +29,7 @@ public class AppointmentView {
     }
 
 
-    public String ConvertDateToString() {
 
-        return this.appointmentDate.toString();
-    }
 
     public Long getId() {
         return id;

@@ -17,10 +17,7 @@ import org.zkoss.zul.Messagebox;
 import javax.persistence.Convert;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.ZoneId;
+import java.time.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -47,116 +44,150 @@ public class BookAppointmentViewModel {
     Date dayOfAppointment = new Date();
     //selected string from the view
     public String selectedTimeOfAppointment;
+
     public PatientService getPatientService() {
         return patientService;
     }
+
     public String reasonOfVisit;
+
     public String getReasonOfVisit() {
         return reasonOfVisit;
     }
+
     public void setReasonOfVisit(String reasonOfVisit) {
         this.reasonOfVisit = reasonOfVisit;
     }
+
     public List<DoctorView> getAllDoctors() {
         return allDoctors;
     }
+
     public List<Patient> getAllPatients() {
         return allPatients;
     }
+
     public void setAllPatients(List<Patient> allPatients) {
         this.allPatients = allPatients;
     }
+
     public BookAppointmentViewModel() {
     }
+
     public DoctorView getSelectedDoctor() {
         return selectedDoctor;
     }
+
     public void setSelectedDoctor(DoctorView selectedDoctor) {
         this.selectedDoctor = selectedDoctor;
     }
+
     public AppointmentView getAppointment() {
         return appointment;
     }
+
     public void setAppointment(AppointmentView appointment) {
         this.appointment = appointment;
     }
+
     public Patient getPatientPersistence() {
         return patientPersistence;
     }
+
     public void setPatientPersistence(Patient patientPersistence) {
         this.patientPersistence = patientPersistence;
     }
+
     public ReasonView getReason() {
         return reason;
     }
+
     public void setReason(ReasonView reason) {
         this.reason = reason;
     }
+
     public DoctorService getDoctorService() {
         return doctorService;
     }
+
     public void setDoctorService(DoctorService doctorService) {
         this.doctorService = doctorService;
     }
+
     public AppointmentService getAppointmentService() {
         return appointmentService;
     }
+
     public void setAppointmentService(AppointmentService appointmentService) {
         this.appointmentService = appointmentService;
     }
+
     public Patient getSelectedPatient() {
         return selectedPatient;
     }
+
     public void setSelectedPatient(Patient selectedPatient) {
         this.selectedPatient = selectedPatient;
     }
+
     public void setPatientService(PatientService patientService) {
         this.patientService = patientService;
     }
+
     public List<String> getAppointmentTimes() {
         return appointmentTimes;
     }
+
     public void setAppointmentTimes(List<String> appointmentTimes) {
         this.appointmentTimes = appointmentTimes;
     }
+
     public void setAllDoctors(List<DoctorView> allDoctors) {
         this.allDoctors = allDoctors;
     }
+
     public String getSelectedTimeOfAppointment() {
         return selectedTimeOfAppointment;
     }
+
     public void setSelectedTimeOfAppointment(String selectedTimeOfAppointment) {
         this.selectedTimeOfAppointment = selectedTimeOfAppointment;
     }
-    @Init(superclass = true)
+
+    @Init
     public void BookAppointmentInitSetup() {
         //this is for the book-appointment.zul
         this.allDoctors = doctorService.getAllDoctors().stream().map(Conversions::convertDoctorToView).collect(Collectors.toList());
         this.allPatients = patientService.getAllPatients();
     }
+
     @Command
     @NotifyChange({"allDoctors"})
     public void changeFilter() {
         this.allDoctors = doctorService.getDoctorsByVisitReason(reasonOfVisit).stream().map(Conversions::convertDoctorToView).collect(Collectors.toList());
     }
+
     @Command //@Command declares a command method
     @NotifyChange({"appointment", "appointmentTimes"})
     public void selectedDoctor() {
         this.appointment.doctor = this.selectedDoctor;
         this.appointmentTimes = appointmentTime();
     }
+
     @Command //@Command declares a command method
     @NotifyChange({"appointment"})
     public void selectedDateOfAppointment() {
         //dayOfAppointment is variable for selected date
         this.appointment.appointmentDate = convertSelectedTimeDate(selectedTimeOfAppointment);
     }
+
     @Command //@Command declares a command method
     @NotifyChange({"patientPersistence", "appointment"})
     public void selectedPatient() {
         this.patientPersistence = this.getPatientService().findPatient(this.selectedPatient);
         this.appointment.patient = this.patientPersistence;
     }
+
     @Command
     @NotifyChange()
     public void addAppointment() {
@@ -168,22 +199,69 @@ public class BookAppointmentViewModel {
             Messagebox.show("Appointment booked successfully", "Success", Messagebox.OK, Messagebox.INFORMATION);
         }
     }
+
     public List<String> appointmentTime() {
         //Once the doctor is selected we can fetch the list of availabilities for that particular doctor
         List<Availability> doctorAvailabilities = doctorService.getAvailabilityByDoctor(Conversions.convertViewToDoctor(this.appointment.doctor));
+
+
+        List<Appointment> bookedAppointments = appointmentService.getAllAppointments();
         List<String> allAppointmentTimes = new ArrayList<>();
+
         for (Availability availability : doctorAvailabilities) {
+
             String dayOfWeek = availability.getDayOfWeek().toString();
             String firstLetter = dayOfWeek.substring(0, 1);
             String otherLetters = dayOfWeek.substring(1).toLowerCase();
+
             LocalTime start = availability.getBeginTime();
+
+            //store it in another variable too,in order to compare it with timeOfBookedAppointment at the other loop
+
+
             LocalTime end = availability.getEndTime();
             allAppointmentTimes.add(firstLetter + otherLetters + " " + start.toString());
             while (start.isBefore(end)) {
                 start = start.plusMinutes(30);
                 allAppointmentTimes.add(firstLetter + otherLetters + " " + start.toString());
             }
-            allAppointmentTimes.remove(allAppointmentTimes.size() - 1);
+        }
+        allAppointmentTimes.remove(allAppointmentTimes.size() - 1);
+        for (Availability availability : doctorAvailabilities) {
+            for (Appointment appointment : bookedAppointments) {
+                Date dateOfAppointment = appointment.getDateOfAppointment();
+
+
+                LocalTime startOfAppointment = availability.getBeginTime();
+                LocalTime endOfAppointment = availability.getEndTime();
+                //Get the weekday of the booked day
+                SimpleDateFormat simpleDateformat = new SimpleDateFormat("EEEE"); // the day of the week spelled out completely
+                String weekDayFromDb = simpleDateformat.format(dateOfAppointment);
+                String availableWeekDay = availability.getDayOfWeek().toString();
+                String firstLetter = availableWeekDay.substring(0, 1);
+                String otherLetters = availableWeekDay.substring(1).toLowerCase();
+
+
+                String availableWeekDayFormatted = firstLetter + otherLetters;
+
+                while (startOfAppointment.isBefore(endOfAppointment)) {
+                    if (weekDayFromDb.equals(availableWeekDayFormatted) && dateOfAppointment.getMinutes() == startOfAppointment.getMinute() && dateOfAppointment.getHours() == startOfAppointment.getHour()  /*appointment.getDoctor().getId() == Conversions.convertViewToDoctor(this.appointment.doctor).getId()*/)
+                    //if the doctor in appointment table is the current one (chosen in view)
+                    {  // appointment.getDoctor().getId().equals(Conversions.convertViewToDoctor(this.appointment.doctor).getId())) {
+
+                        String appointmentTimeToBeRemoved = availableWeekDayFormatted + " " + dateOfAppointment.getHours() + ":" + dateOfAppointment.getMinutes();
+                        if (dateOfAppointment.getMinutes() == 0)
+                            appointmentTimeToBeRemoved += "0";
+                        allAppointmentTimes.remove(appointmentTimeToBeRemoved);
+                        startOfAppointment = startOfAppointment.plusMinutes(30);
+                    } else {
+                        startOfAppointment = startOfAppointment.plusMinutes(30);
+
+
+                    }
+
+                }
+            }
         }
         return allAppointmentTimes;
     }
@@ -220,5 +298,6 @@ public class BookAppointmentViewModel {
                 .atZone(ZoneId.systemDefault())
                 .toInstant());
     }
+
 }
 

@@ -4,12 +4,14 @@ import com.example.Clinic.spring.model.User;
 import com.example.Clinic.spring.services.AppointmentService;
 import com.example.Clinic.spring.services.AuthenticationService;
 import org.zkoss.bind.annotation.Init;
+import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
+import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-public class MyAppointmentsView extends BookAppointmentViewModel {
+@VariableResolver(DelegatingVariableResolver.class)
+public class MyAppointmentsView /*extends BookAppointmentViewModel*/ {
 
     @WireVariable
     AuthenticationService authenticationService;
@@ -42,7 +44,7 @@ public class MyAppointmentsView extends BookAppointmentViewModel {
         this.appointmentService = appointmentService;
     }
 
-    @Init(superclass = true)
+    @Init//(superclass = true)
     public void ListAppointmentInitSetup() {
 
 

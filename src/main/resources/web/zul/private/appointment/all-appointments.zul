@@ -25,7 +25,7 @@
 
                     <listcell label="@load(appointment.id)"/>
                     <listcell label="@load(appointment.getDoctorName())"/>
-                    <listcell label="@load(appointment.ConvertDateToString())"/>
+                    <listcell label="@load(appointment.appointmentDate)"/>
                     <listcell label="@load(appointment.getPatientName())"/>
                     <listcell label="@load(appointment.reason)"/>
 
