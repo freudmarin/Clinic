@@ -210,7 +210,6 @@ public class BookAppointmentViewModel {
 //Building of UI functionality
 
 
-
         allAppointmentTimes = doctorAvailabilities.stream()
                 .flatMap(availability -> this.filterAppointments(availability, bookedAppointments))
                 .collect(Collectors.toList());
