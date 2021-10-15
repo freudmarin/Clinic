@@ -44,9 +44,13 @@
             </menu>
             <menuitem style="margin-right:30px;" label="${sessionScope.message}" onClick="alert(self.label)"/>
             <zk if="${sessionScope.userLoggedIn !=null}">
-                <menuitem style="float:right;" apply="com.example.Clinic.spring.controllers.LogOutController"
+                <menuitem style="padding:left:400px;" label="${sessionScope.message}" />
+                <menuitem  style="padding:left:550px;" apply="com.example.Clinic.spring.controllers.LogOutController"
                           id="logout" label="Logout" sclass="logout"/>
             </zk>
+
+
+
 
         </menubar>
     </zk>

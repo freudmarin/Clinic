@@ -72,12 +72,12 @@ public class LogInViewModel {
 
             role = authenticationService.getUserRole(user.getId());
             if (role.equals("superuser")) {
-                Executions.sendRedirect("/zkau/web/zul/minimal.zul");
+                Executions.sendRedirect("~./zul/private/doctor/all-doctors.zul");
             } else if (role.equals("doctor")) {
 
-                Executions.sendRedirect("/zkau/web/zul/minimal.zul");
+                Executions.sendRedirect("~./zul/private/appointment/my-appointments.zul");
             } else {
-                Executions.sendRedirect("/zkau/web/zul/minimal.zul");
+                Executions.sendRedirect("~./zul/private/appointment/book-appointment.zul");
             }
 
 

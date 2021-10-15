@@ -6,17 +6,19 @@
     <window apply="org.zkoss.bind.BindComposer"
             border="normal" hflex="1" vflex="1" contentStyle="overflow:auto"
             viewModel="@id('vm') @init('com.example.Clinic.spring.controllers.PatientViewModel')">
+        <vbox hflex="min" align="center" style="margin-top:100px;">
 <grid width="70%">
       <columns>
           <column label=""/>
           <column label=""/>
+
       </columns>
       <rows>
           <row>
               <hbox>
                   <label value="Patient's ID"/>
               </hbox>
-              <textbox  value="@bind(vm.patientID)" name="patientID" width="200px"/>
+              <textbox  value="@bind(vm.patientID)" name="patientID" />
           </row>
           <row>
               <hbox>
@@ -29,10 +31,13 @@
               <hbox>
                   <label value="Patient's Date of Birth  "/>
               </hbox>
-              <datebox format="MM/dd/yyyy" value="@bind(vm.dateOfBirth)" name="dateOfBirth"/>
+              <datebox format="MM/dd/yyyy" value="@bind(vm.dateOfBirth)" width="213px" name="dateOfBirth"/>
           </row>
       </rows>
   </grid>
+        <separator/>
+
         <button onClick="@command('add')" label="Register"/>
+        </vbox>
     </window>
 </zk>
