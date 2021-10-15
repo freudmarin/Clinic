@@ -4,6 +4,7 @@ import com.example.Clinic.spring.model.*;
 import com.example.Clinic.spring.services.AppointmentService;
 import com.example.Clinic.spring.services.DoctorService;
 import com.example.Clinic.spring.services.PatientService;
+import org.apache.commons.lang3.StringUtils;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
@@ -13,13 +14,19 @@ import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 import org.zkoss.zul.Messagebox;
+import sun.security.x509.AVA;
 
 import javax.persistence.Convert;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoField;
+import java.time.temporal.TemporalAccessor;
+import java.time.temporal.WeekFields;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.example.Clinic.spring.controllers.Conversions.convertViewToDoctor;
 
@@ -200,6 +207,42 @@ public class BookAppointmentViewModel {
         }
     }
 
+    /*public static void main(String[] args) {
+        System.out.println(LocalDate.now().with(DayOfWeek.FRIDAY));
+    }*/
+
+    private List<LocalDateTime> toDateAvailability(Availability availability) {
+
+        if (availability.getBeginTime().isAfter(LocalTime.now())) {
+            return Collections.emptyList();
+        }
+
+        List<LocalDateTime> result = new ArrayList<>();
+
+        LocalDate day = LocalDate.now().with(availability.getDayOfWeek());
+        LocalTime start = availability.getBeginTime();
+        LocalTime end = availability.getEndTime();
+
+        while (start.isBefore(end)) {
+            start = start.plusMinutes(30);
+            result.add(LocalDateTime.of(day, start));
+        }
+
+        return result;
+    }
+
+    private Stream<String> filterAppointments(Availability availability, List<Appointment> appointments) {
+        List<LocalDateTime> availabilities = toDateAvailability(availability);
+        return availabilities.parallelStream()
+                .filter(localDateTime -> appointments.stream()
+                        .noneMatch(app -> convertDateToLocal(app.getDateOfAppointment()).equals(localDateTime)))
+                .map(localDateTime -> localDateTime.format(DateTimeFormatter.ofPattern("EEEE HH:mm")));
+    }
+
+    private LocalDateTime convertDateToLocal(Date date) {
+        return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+    }
+
     public List<String> appointmentTime() {
         //Once the doctor is selected we can fetch the list of availabilities for that particular doctor
         List<Availability> doctorAvailabilities = doctorService.getAvailabilityByDoctor(Conversions.convertViewToDoctor(this.appointment.doctor));
@@ -215,22 +258,19 @@ public class BookAppointmentViewModel {
                 .collect(Collectors.toList());
 
 
-        for (Availability availability : doctorAvailabilities) {
+        /*for (Availability availability : doctorAvailabilities) {
 
             String dayOfWeek = availability.getDayOfWeek().toString();
-            String firstLetter = dayOfWeek.substring(0, 1);
-            String otherLetters = dayOfWeek.substring(1).toLowerCase();
+            String dayString = StringUtils.capitalize(dayOfWeek);
 
             LocalTime start = availability.getBeginTime();
-
             //store it in another variable too,in order to compare it with timeOfBookedAppointment at the other loop
-
-
             LocalTime end = availability.getEndTime();
-            allAppointmentTimes.add(firstLetter + otherLetters + " " + start.toString());
+
+            allAppointmentTimes.add(dayString + " " + start.toString());
             while (start.isBefore(end)) {
                 start = start.plusMinutes(30);
-                allAppointmentTimes.add(firstLetter + otherLetters + " " + start.toString());
+                allAppointmentTimes.add(dayString + " " + start.toString());
             }
         }
         allAppointmentTimes.remove(allAppointmentTimes.size() - 1);
@@ -238,7 +278,6 @@ public class BookAppointmentViewModel {
         for (Availability availability : doctorAvailabilities) {
             for (Appointment appointment : bookedAppointments) {
                 Date dateOfAppointment = appointment.getDateOfAppointment();
-
 
                 LocalTime startOfAppointment = availability.getBeginTime();
                 LocalTime endOfAppointment = availability.getEndTime();
@@ -248,7 +287,6 @@ public class BookAppointmentViewModel {
                 String availableWeekDay = availability.getDayOfWeek().toString();
                 String firstLetter = availableWeekDay.substring(0, 1);
                 String otherLetters = availableWeekDay.substring(1).toLowerCase();
-
 
                 String availableWeekDayFormatted = firstLetter + otherLetters;
 
@@ -261,16 +299,12 @@ public class BookAppointmentViewModel {
                         if (dateOfAppointment.getMinutes() == 0)
                             appointmentTimeToBeRemoved += "0";
                         allAppointmentTimes.remove(appointmentTimeToBeRemoved);
-                        startOfAppointment = startOfAppointment.plusMinutes(30);
-                    } else {
-                        startOfAppointment = startOfAppointment.plusMinutes(30);
-
-
                     }
+                    startOfAppointment = startOfAppointment.plusMinutes(30);
 
                 }
             }
-        }
+        }*/
         return allAppointmentTimes;
     }
 

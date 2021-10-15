@@ -8,45 +8,75 @@
          viewModel="@id('vm') @init('com.example.Clinic.spring.controllers.BookAppointmentViewModel')">
 
         <div style="margin-top:22px;">
-<label style="margin-left:100px;"  value="Reason of visit :"/>
-        <textbox  instant="true" width="200px" style="margin-left:110;"
-                 value="@bind(vm.reasonOfVisit)" onChange="@command('changeFilter')"/>
-         Choose Patient :
-            <combobox id="patientCombobox" model="@load(vm.allPatients)" onSelect="@command('selectedPatient')" selectedItem="@bind(vm.selectedPatient)"
+            <label style="margin-left:100px;" value="Reason of visit :"/>
+            <textbox instant="true" width="200px" style="margin-left:110;"
+                     value="@bind(vm.reasonOfVisit)" onChange="@command('changeFilter')"/>
+            Choose patient :
+            <combobox id="patientCombobox" model="@load(vm.allPatients)" onSelect="@command('selectedPatient')"
+                      selectedItem="@bind(vm.selectedPatient)"
                       autodrop="true">
                 <template name="model">
-                    <comboitem label="@load(each.name)" />
+                    <comboitem label="@load(each.name)"/>
                 </template>
             </combobox>
+            <!--button for new patient-->
+            <!--<Include> <Iframe>-->
 
             Selected doctor :
-            <textbox  instant="true" width="200px" style="margin-left:180;"
-                      value="@bind(vm.appointment.doctor.name)" readonly="true" />
-
-            Choose appointment date :
-            <datebox  format="long+medium" instant="true" width="200px" style="margin-left:200;"
-                      value="@bind(vm.appointment.appointmentDate)" />
-        <listbox style="margin-left:100px;margin-top:10px;" model="@load(vm.allDoctors)"   onSelect="@command('selectedDoctor')" selectedItem="@bind(vm.selectedDoctor)" height="350px">
+            <textbox instant="true" width="200px" style="margin-left:180;"
+                     value="@bind(vm.appointment.doctor.name)" readonly="true"/>
 
 
-            <listhead sizable="true">
-                <listheader width="30%" label="Doctor's ID"/>
-                <listheader width="30%" label="Name"/>
-                <listheader width="40% " label="Specialization"/>
-            </listhead>
-            <template name="model" var="doctor">
-                <listitem style="text-align:left;" >
+            <separator/>
+            <label style="margin-left:100px;" value="Choose appointment date :"/>
+            <!-- days of week + hours (should be filtered if the doctor has already been booked)-->
+            <!-- a visit lasts half an hour -->
+
+            <!--MONDAY 9.00-9.30 -->
+            <!--MONDAY 9.30-10.00 -->
+            <!--MONDAY ...... -->
+            <!--MONDAY 11.30-12.00 -->
 
 
-                    <listcell label="@load(doctor.id)"/>
-                    <listcell label="@load(doctor.name)"/>
+            <combobox id="appointmentCombobox" model="@load(vm.appointmentTimes)"
+                      onSelect="@command('selectedDateOfAppointment')"
+                      selectedItem="@bind(vm.selectedTimeOfAppointment)" autodrop="true"> <!--onSelect="@command('selectedPatient')
+                      selectedItem="@bind(vm.selectedPatient)"-->
 
-                    <listcell label="@load(doctor.specializationToString())"/>
+                <template name="model">
+                    <comboitem label="@load(each)"/>
+                </template>
+            </combobox>
+            Selected date :
+            <datebox format="long+medium" instant="true" width="200px" style="margin-left:200;"
+                     value="@bind(vm.appointment.appointmentDate)"/>
 
-                </listitem>
-            </template>
-        </listbox>
-            <button onClick="@command('addAppointment')" label="Book "/>
+            <listbox style="margin-left:100px;margin-top:10px;" model="@load(vm.allDoctors)"
+                     onSelect="@command('selectedDoctor')" selectedItem="@bind(vm.selectedDoctor)" height="350px">
+
+
+                <listhead sizable="true">
+                    <listheader width="30%" label="Doctor's ID"/>
+                    <listheader width="30%" label="Name"/>
+                    <listheader width="40% " label="Specialization"/>
+                </listhead>
+                <template name="model" var="doctor">
+                    <listitem style="text-align:left;">
+
+
+                        <listcell label="@load(doctor.id)"/>
+                        <listcell label="@load(doctor.name)"/>
+
+                        <listcell label="@load(doctor.specializationToString())"/>
+
+                    </listitem>
+                </template>
+            </listbox>
+            <separator/>
+
+
+            <button onClick="@command('addAppointment')" style="margin-left:795px;" label="Book "/>
+
         </div>
 
 

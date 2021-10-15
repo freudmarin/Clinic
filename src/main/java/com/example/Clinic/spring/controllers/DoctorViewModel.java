@@ -56,7 +56,7 @@ public class DoctorViewModel extends Conversions {
         this.availability = availability;
     }
 
-  public   List<DoctorView> allDoctors;
+    public List<DoctorView> allDoctors;
     List<Specialization> allSpecializations;
 
     public List<Specialization> getAllSpecializations() {
@@ -72,7 +72,6 @@ public class DoctorViewModel extends Conversions {
     }
 
 
-
     @Init
     public void initSetup() {
         this.allDoctors = doctorService.getAllDoctors().stream().map(Conversions::convertDoctorToView).collect(Collectors.toList());
@@ -86,31 +85,7 @@ public class DoctorViewModel extends Conversions {
     public DoctorViewModel() {
     }
 
-    public  DoctorView convertDoctorToView(Doctor doctor) {
-        DoctorView result = null;
 
-        if (doctor != null) {
-            result = new DoctorView(doctor.getId(), doctor.getName(), doctor.getUsername(), doctor.getPassword(),
-                    doctor.getAvailabilityList().stream().map(avl ->
-                            new AvailabilityView(avl.getDayOfWeek(),
-                                    avl.getBeginTime() != null ? avl.getBeginTime().format(new DateTimeFormatterBuilder().toFormatter(Locale.ITALY)) : "8:00",
-                                    avl.getEndTime() != null ? avl.getEndTime().format(new DateTimeFormatterBuilder().toFormatter(Locale.ITALY)) : "19:00")).collect(Collectors.toList()),
-                    doctor.getSpecializationList().stream().map(spec -> new SpecializationView(spec.getId(), spec.getType())).collect(Collectors.toList()));
-        }
-
-        return result;
-    }public  Doctor convertViewToDoctor(DoctorView doctorView) {
-        Doctor result = null;
-
-        if (doctor != null) {
-            result = new Doctor(doctorView.getId(),"doctor", doctorView.getName(), doctorView.getUserName(), doctorView.getPassword(),
-
-
-                    doctorView.getSpecializations().stream().map(spec -> new Specialization(spec.getId(), spec.getType())).collect(Collectors.toList()));
-        }
-
-        return result;
-    }
     @Command
     @NotifyChange()
     public void addDoctor() {
