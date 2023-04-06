@@ -5,7 +5,6 @@ public class SpecializationView {
     String type;
 
     public SpecializationView(Integer id, String type) {
-
         this.id = id;
         this.type = type;
     }
