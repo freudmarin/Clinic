@@ -58,18 +58,12 @@ public class LogInViewModel {
     @Command("login")
     @NotifyChange({"errorMessage", "role"})
     public void doLogin() {
-
-
         if (!authenticationService.authenticate(username, password)) {
             errorMessage = "User ID  or password is/are not correct.";
 
         } else {
-
-
             User user = authenticationService.getUserData();
             // message="Welcome, " + user.getUsername();
-
-
             role = authenticationService.getUserRole(user.getId());
             if (role.equals("superuser")) {
                 Executions.sendRedirect("~./zul/private/doctor/all-doctors.zul");
@@ -78,16 +72,7 @@ public class LogInViewModel {
                 Executions.sendRedirect("~./zul/private/appointment/my-appointments.zul");
             } else {
                 Executions.sendRedirect("~./zul/private/appointment/book-appointment.zul");
-            }
-
-
-        /*String requested = (String) Executions.getCurrent().getSession().getAttribute(TaskConstants.SessionKeys.SESSION_ATTR_REQUEST_URL);
-        if (requested != null && !requested.isEmpty()) {
-            System.out.println(requested);
-            Executions.getCurrent().getSession().removeAttribute(TaskConstants.SessionKeys.SESSION_ATTR_REQUEST_URL);
-            Executions.sendRedirect(requested);*/
-        }
+       }
     }
-
 }
 
