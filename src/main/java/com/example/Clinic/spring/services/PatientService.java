@@ -17,7 +17,7 @@ public class PatientService {
     }
     public Patient addPatient(Patient patient) {
         Patient patientFromDatabase = patientRepository.findByPatientID(patient.getPatientID());
-//If doesn't exists on database
+        //If doesn't exists on database
         if (patientFromDatabase == null) {
             patient = patientRepository.save(patient);
             return patient;
