@@ -12,6 +12,4 @@ public interface SpecializationRepository extends JpaRepository<Specialization, 
     List<Specialization> findByDoctors(Doctor doctor); //all specialization of a doctor
 
     Specialization findByReasonList(Reason reason);
-
-
 }
