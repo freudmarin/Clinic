@@ -27,11 +27,7 @@ public class Appointment {
 
     private Date dateOfAppointment;
     private String reason;
-
-    /*   @OneToOne(optional = false)
-       @JoinColumn(name = "reasonID")
-       @LazyCollection(LazyCollectionOption.FALSE)
-       private Reason reason;*/
+    
     public Long getId() {
         return id;
     }
