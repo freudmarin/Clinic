@@ -68,7 +68,6 @@ public class LogInViewModel {
             if (role.equals("superuser")) {
                 Executions.sendRedirect("~./zul/private/doctor/all-doctors.zul");
             } else if (role.equals("doctor")) {
-
                 Executions.sendRedirect("~./zul/private/appointment/my-appointments.zul");
             } else {
                 Executions.sendRedirect("~./zul/private/appointment/book-appointment.zul");
