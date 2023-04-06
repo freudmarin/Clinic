@@ -23,7 +23,7 @@ public class PatientViewModel {
     public PatientService getPatientService() {
         return patientService;
     }
-@WireVariable
+    @WireVariable
     PatientService patientService;
     public String getPatientID() {
         return patientID;
@@ -68,8 +68,6 @@ public class PatientViewModel {
     public PatientViewModel() {
 
     }
-
-
     @Command
     @NotifyChange()
     public void add() {
