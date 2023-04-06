@@ -24,7 +24,6 @@ public class Appointment {
     @JoinColumn(name = "patientID")
     private Patient patient;
 
-
     private Date dateOfAppointment;
     private String reason;
     
