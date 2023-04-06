@@ -22,14 +22,10 @@ import java.util.Optional;
 public class DoctorService {
     @Autowired
     DoctorRepository doctorRepository;
-
     @Autowired
     AvailabilityRepository availabilityRepository;
-
     @Autowired
     SpecializationRepository specializationRepository;
-
-
     @Autowired
     ReasonRepository reasonRepository;
     @Autowired
@@ -41,39 +37,18 @@ public class DoctorService {
 
     public List<Doctor> getAllDoctors() {
         return doctorRepository.findAll();
-//        List<Doctor> all = doctorRepository.findAll();
-//        all.forEach(doctor -> {
-//            doctor.getAvailabilityList().stream().count();
-//            doctor.getSpecializationList().stream().count();
-//            doctor.getAppointmentListList().stream().count();
-//        });
-//
-//        return all;
     }
-   /* public Doctor getDoctorById(Long id) {
-        return doctorRepository.findById(id);*/
-//        List<Doctor> all = doctorRepository.findAll();
-//        all.forEach(doctor -> {
-//            doctor.getAvailabilityList().stream().count();
-//            doctor.getSpecializationList().stream().count();
-//            doctor.getAppointmentListList().stream().count();
-//        });
-//
-//        return all;
-
-
     public List<Doctor> getDoctorsByVisitReason(String  reason) {
         List<Doctor> doctorList;
-if(reason!=null && !reason.equals("")) {
-    Reason reasonResult = reasonRepository.findByReasonContaining(reason);
-    Specialization specialization = specializationRepository.findByReasonList(reasonResult);
-
-    doctorList = doctorRepository.findBySpecializationList(specialization);
-}
-else {
-    doctorList = doctorRepository.findAll();
-}
-return doctorList;
+        if(reason!=null && !reason.equals("")) {
+            Reason reasonResult = reasonRepository.findByReasonContaining(reason);
+            Specialization specialization = specializationRepository.findByReasonList(reasonResult);
+            doctorList = doctorRepository.findBySpecializationList(specialization);
+        }
+        else {
+            doctorList = doctorRepository.findAll();
+        }
+        return doctorList;
     }
     public void addDoctor(Doctor doctor) {
         doctorRepository.save(doctor);
@@ -85,11 +60,11 @@ return doctorList;
     public void addAvailability(Availability availability) {
         availabilityRepository.save(availability);
     }
-    public Reason   getReason(String reason) {
-    return  reasonRepository.findByReason(reason);
+    public Reason getReason(String reason) {
+        return  reasonRepository.findByReason(reason);
     }
-public List<Availability> getAvailabilityByDoctor (Doctor doctor)
-{
-    return availabilityRepository.findByDoctor(doctor);
-}
+    public List<Availability> getAvailabilityByDoctor (Doctor doctor)
+    {
+        return availabilityRepository.findByDoctor(doctor);
+    }
 }
