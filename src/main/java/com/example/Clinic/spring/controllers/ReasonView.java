@@ -34,6 +34,4 @@ public class ReasonView {
 
     public ReasonView() {
     }
-
-
 }
