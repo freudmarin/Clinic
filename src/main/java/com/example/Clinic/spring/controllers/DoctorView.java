@@ -84,7 +84,4 @@ public class DoctorView {
     public void setSpecializations(List<SpecializationView> specializations) {
         this.specializations = specializations;
     }
-
-    //    String repeatPassword;
-
 }
