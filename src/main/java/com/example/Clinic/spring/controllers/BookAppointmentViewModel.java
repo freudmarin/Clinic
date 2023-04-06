@@ -36,7 +36,6 @@ public class BookAppointmentViewModel {
     List<Patient> allPatients;
     AppointmentView appointment = new AppointmentView();
     ReasonView reason = new ReasonView();
-    //public PatientViewModel patientPersistence;
     DoctorView selectedDoctor = new DoctorView();
     Patient selectedPatient = new Patient();
     Patient patientPersistence = new Patient();
@@ -47,9 +46,7 @@ public class BookAppointmentViewModel {
     @WireVariable
     AppointmentService appointmentService;
     List<String> appointmentTimes = new ArrayList<>();
-    //converted date for persistence
     Date dayOfAppointment = new Date();
-    //selected string from the view
     public String selectedTimeOfAppointment;
 
     public PatientService getPatientService() {
@@ -181,14 +178,14 @@ public class BookAppointmentViewModel {
         this.appointmentTimes = appointmentTime();
     }
 
-    @Command //@Command declares a command method
+    @Command 
     @NotifyChange({"appointment"})
     public void selectedDateOfAppointment() {
         //dayOfAppointment is variable for selected date
         this.appointment.appointmentDate = convertSelectedTimeDate(selectedTimeOfAppointment);
     }
 
-    @Command //@Command declares a command method
+    @Command
     @NotifyChange({"patientPersistence", "appointment"})
     public void selectedPatient() {
         this.patientPersistence = this.getPatientService().findPatient(this.selectedPatient);
@@ -206,11 +203,7 @@ public class BookAppointmentViewModel {
             Messagebox.show("Appointment booked successfully", "Success", Messagebox.OK, Messagebox.INFORMATION);
         }
     }
-
-    /*public static void main(String[] args) {
-        System.out.println(LocalDate.now().with(DayOfWeek.FRIDAY));
-    }*/
-
+    
     private List<LocalDateTime> toDateAvailability(Availability availability) {
 
         if (availability.getBeginTime().isAfter(LocalTime.now())) {
@@ -246,65 +239,12 @@ public class BookAppointmentViewModel {
     public List<String> appointmentTime() {
         //Once the doctor is selected we can fetch the list of availabilities for that particular doctor
         List<Availability> doctorAvailabilities = doctorService.getAvailabilityByDoctor(Conversions.convertViewToDoctor(this.appointment.doctor));
-
-
         List<Appointment> bookedAppointments = appointmentService.getAllAppointments();
         List<String> allAppointmentTimes = new ArrayList<>();
-//Building of UI functionality
-
-
+        //Building of UI functionality
         allAppointmentTimes = doctorAvailabilities.stream()
                 .flatMap(availability -> this.filterAppointments(availability, bookedAppointments))
                 .collect(Collectors.toList());
-
-
-        /*for (Availability availability : doctorAvailabilities) {
-
-            String dayOfWeek = availability.getDayOfWeek().toString();
-            String dayString = StringUtils.capitalize(dayOfWeek);
-
-            LocalTime start = availability.getBeginTime();
-            //store it in another variable too,in order to compare it with timeOfBookedAppointment at the other loop
-            LocalTime end = availability.getEndTime();
-
-            allAppointmentTimes.add(dayString + " " + start.toString());
-            while (start.isBefore(end)) {
-                start = start.plusMinutes(30);
-                allAppointmentTimes.add(dayString + " " + start.toString());
-            }
-        }
-        allAppointmentTimes.remove(allAppointmentTimes.size() - 1);
-        //If doctor is at another appointment ,don't show that time at combobox
-        for (Availability availability : doctorAvailabilities) {
-            for (Appointment appointment : bookedAppointments) {
-                Date dateOfAppointment = appointment.getDateOfAppointment();
-
-                LocalTime startOfAppointment = availability.getBeginTime();
-                LocalTime endOfAppointment = availability.getEndTime();
-                //Get the weekday of the booked day
-                SimpleDateFormat simpleDateformat = new SimpleDateFormat("EEEE"); // the day of the week spelled out completely
-                String weekDayFromDb = simpleDateformat.format(dateOfAppointment);
-                String availableWeekDay = availability.getDayOfWeek().toString();
-                String firstLetter = availableWeekDay.substring(0, 1);
-                String otherLetters = availableWeekDay.substring(1).toLowerCase();
-
-                String availableWeekDayFormatted = firstLetter + otherLetters;
-
-                while (startOfAppointment.isBefore(endOfAppointment)) {
-                    if (weekDayFromDb.equalsIgnoreCase(availableWeekDayFormatted) &&
-                            dateOfAppointment.getMinutes() == startOfAppointment.getMinute() &&
-                            dateOfAppointment.getHours() == startOfAppointment.getHour()  *//*appointment.getDoctor().getId() == Conversions.convertViewToDoctor(this.appointment.doctor).getId()*//*) {  // appointment.getDoctor().getId().equals(Conversions.convertViewToDoctor(this.appointment.doctor).getId())) {
-
-                        String appointmentTimeToBeRemoved = availableWeekDayFormatted + " " + dateOfAppointment.getHours() + ":" + dateOfAppointment.getMinutes();
-                        if (dateOfAppointment.getMinutes() == 0)
-                            appointmentTimeToBeRemoved += "0";
-                        allAppointmentTimes.remove(appointmentTimeToBeRemoved);
-                    }
-                    startOfAppointment = startOfAppointment.plusMinutes(30);
-
-                }
-            }
-        }*/
         return allAppointmentTimes;
     }
 
@@ -316,7 +256,7 @@ public class BookAppointmentViewModel {
         int hour = Integer.parseInt(hourAndMinutes[0]);
         int minutes = Integer.parseInt(hourAndMinutes[1]);
         //the selected one
-        int dayOfWeek = DayOfWeek.valueOf(dayOfWeekSelected).getValue();//parseDayOfWeek(dayOfWeekSelected);
+        int dayOfWeek = DayOfWeek.valueOf(dayOfWeekSelected).getValue();
         LocalDate today = LocalDate.now();
         LocalDate choosenDate = today;
         //so  if today's index is greater than the selected it means you can't choose that selected
@@ -330,7 +270,6 @@ public class BookAppointmentViewModel {
             Date choosenDateInDateFormat = convertToDate(choosenDate);
             choosenDateInDateFormat.setHours(hour);
             choosenDateInDateFormat.setMinutes(minutes);
-            //     choosenDateInDateFormat.setTime(hour+minutes);
             return choosenDateInDateFormat;
         }
     }
