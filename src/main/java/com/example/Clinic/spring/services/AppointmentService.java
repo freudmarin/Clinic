@@ -16,16 +16,12 @@ public class AppointmentService {
     public void addAppointment(Appointment appointment) {
         appointmentRepository.save(appointment);
     }
-
-
-
-
+    
     public List<Appointment> getAllAppointments() {
         return appointmentRepository.findAll();
 
     }
     public List<Appointment> getAllAppointmentsForEachDoctor(Doctor doctor) {
         return appointmentRepository.findByDoctor(doctor);
-
     }
 }
