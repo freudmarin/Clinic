@@ -6,19 +6,15 @@ public class AvailabilityView {
 
     boolean selected;
     DayOfWeek day;
-
-
     String start;
     String end;
-
-    //   private final SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+    
     public AvailabilityView(DayOfWeek day, String start, String end) {
 
         this.day = day;
         this.start = start;
         this.end = end;
     }
-
 
     public boolean isSelected() {
         return selected;
