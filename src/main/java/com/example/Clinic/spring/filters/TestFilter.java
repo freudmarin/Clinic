@@ -50,33 +50,3 @@ public class TestFilter implements Filter {
     public void destroy() {
 
     }
-    // it's better to externalize the keys
-
-
-
-      /*  if (session.getAttribute(TaskConstants.SessionKeys.SESSION_ATTR_USER_LOGGED) == null) {
-            String desiredUrl = req.getRequestURL().toString();
-            session.setAttribute(TaskConstants.SessionKeys.SESSION_ATTR_REQUEST_URL, desiredUrl);
-
-            resp.sendRedirect("/zkau/web/zul/login.zul"); // No logged-in user found, so redirect to login page.
-
-        } else {
-
-            ///      resp.sendRedirect(req.getHeader("referer"));
-            filterChain.doFilter(req, resp);
-        }
-    }*/
-
-   /* @Bean
-    public FilterRegistrationBean<TestFilter> filterRegistrationBean() {
-        FilterRegistrationBean<TestFilter> registrationBean = new FilterRegistrationBean<>();
-
-
-        registrationBean.setFilter(new TestFilter());
-        registrationBean.addUrlPatterns("/private/*");
-
-        return registrationBean;
-    }*/
-
-
-}
