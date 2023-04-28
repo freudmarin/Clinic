@@ -23,13 +23,8 @@ public class AppointmentView {
         this.patient = patient;
         this.reason = reason;
     }
-
-
     public AppointmentView() {
     }
-
-
-
 
     public Long getId() {
         return id;
